@@ -1,7 +1,7 @@
 package model;
 
 public class HillModel {
-	
+
 	private String message;
 	private String key;
 
@@ -38,47 +38,75 @@ public class HillModel {
 	}
 
 	// Following function encrypts the message
-	static void encrypt(int cipherMatrix[][], int keyMatrix[][], int messageVector[][]) {
+	static String encrypt(int cipherMatrix[][], int keyMatrix[][], int messageVector[][]) {
 
 		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 1; j++) {
-				
-				cipherMatrix[i][j] = 0;
-				
-				for (int x = 0; x < 3; x++) {
-					cipherMatrix[i][j] += keyMatrix[i][x] * messageVector[x][j];
-				}
-				
-				cipherMatrix[i][j] %= 26;
+
+			cipherMatrix[i][0] = 0;
+
+			for (int x = 0; x < 3; x++) {
+				cipherMatrix[i][0] += keyMatrix[i][x] * messageVector[x][0];
 			}
+
+			cipherMatrix[i][0] %= 26;
+
 		}
+
+		String CipherText = "";
+
+		for (int i = 0; i < 3; i++) {
+			CipherText += (char) (cipherMatrix[i][0] + 65);
+		}
+
+		return CipherText;
+	}
+
+	// Decode
+	public static int findInverse(int a) {
+		int r0 = 101, r1 = a, r2 = 1, t0 = 0, t1 = 1, q = r0 / r1;
+		while (r1 > 0) {
+			r2 = r0 % r1;
+			if(r2==0)
+				break;
+			q = r0 / r1;
+			t1 = q - t0 * t1;
+			r0=r1;
+			r1=r2;
+			t0=t1;
+		}
+		sysou
+		if(r1 > 1)
+			return -1;
+		else if (t1 > 0)
+			return t1;
+		else
+			return t1+26;
 	}
 
 	// Function to implement Hill Cipher
 	public void HillCipher() {
 		// Get key matrix from the key string
-		int[][] keyMatrix = new int[3][3];
-		getKeyMatrix(key, keyMatrix);
+//		int[][] keyMatrix = new int[3][3];
+//		getKeyMatrix(key, keyMatrix);
+//
+//		// Generate vector for the message
+//		int[][] messageVector = new int[3][1];
+//
+//		for (int i = 0; i < 3; i++)
+//			messageVector[i][0] = message.charAt(i) % 65;
+//
+//		// Generates the cipherMatrix
+//		int[][] cipherMatrix = new int[3][1];
+//
+//		// Encrypting
+//		String CipherText = encrypt(cipherMatrix, keyMatrix, messageVector);
+//
+//		// Finally print the ciphertext
+//		System.out.print(" Ciphertext:" + CipherText);
+	}
 
-		// Generate vector for the message
-		int[][] messageVector = new int[3][1];
-		
-		for(int i = 0; i < 3; i++)
-			messageVector[i][0] = message.charAt(i) % 65;
+	public static void main(String[] args) {
 
-		// Generates the cipherMatrix
-		int[][] cipherMatrix = new int[3][1];
-		
-		encrypt(cipherMatrix, keyMatrix, messageVector);
-
-		// Generate the encrypted text from the encrypted vector
-		String CipherText = "";
-		
-		for (int i = 0; i < 3; i++) {
-			CipherText += (char) (cipherMatrix[i][0] + 65);
-		}
-
-		// Finally print the ciphertext
-		System.out.print(" Ciphertext:" + CipherText);
+		System.out.println(findInverse(25));
 	}
 }
