@@ -6,4 +6,5 @@
  *
  */
 module Affline {
+	requires java.desktop;
 }
