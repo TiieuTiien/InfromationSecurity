@@ -120,6 +120,10 @@ public class CeasarView extends JFrame {
 		JButton eButt = new JButton("Encrypt");
 		eButt.addActionListener(ceasarListener);
 		eButtPanel.add(eButt);
+		
+		JButton eSetButt = new JButton("Set");
+		eSetButt.addActionListener(ceasarListener);
+		eButtPanel.add(eSetButt);
 
 		JPanel decryptPanel = new JPanel();
 		cipherPanel.add(decryptPanel);
@@ -157,6 +161,12 @@ public class CeasarView extends JFrame {
 		JButton dButt = new JButton("Decrypt");
 		dButt.addActionListener(ceasarListener);
 		dButtPanel.add(dButt);
+		
+		keyGenButt.setFocusPainted(false);
+		eButt.setFocusPainted(false);
+		dButt.setFocusPainted(false);
+		eSetButt.setFocusPainted(false);
+		
 		this.setTitle("Ceasar encryption and decryption");
 		this.setSize(width, height);
 		this.setLocationRelativeTo(null);
@@ -184,8 +194,8 @@ public class CeasarView extends JFrame {
 		return dCipherText;
 	}
 
-	public void setdCipherText(JTextField dCipherText) {
-		this.dCipherText = dCipherText;
+	public void setdCipherText(String str) {
+		this.dCipherText.setText(str);;
 	}
 
 	public CeasarModel getCeasarModel() {
@@ -244,6 +254,11 @@ public class CeasarView extends JFrame {
 		String cipher = this.getdCipherText().getText().toString();
 		String plain = (cipher.length() > 0 ) ? this.ceasarModel.decrypt(cipher) : "";
 		return plain;
+	}
+
+	public String set() {
+		String cipher = this.geteCipherTextField().getText().toString();
+		return cipher;
 	}
 
 }

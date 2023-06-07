@@ -4,8 +4,6 @@ public class CeasarModel {
 	public static final String ALPHA = "abcdefghijklmnopqrstuvwxyz";
 
 	private int shiftKey;
-	
-	
 
 	public CeasarModel() {
 		this.shiftKey = shiftKeyGen();
@@ -25,34 +23,33 @@ public class CeasarModel {
 
 	public String encrypt(String message) {
 
-		message = message.toLowerCase();
-
 		String cipherText = "";
-		for (int i = 0; i < message.length(); i++) {
-			int charPos = ALPHA.indexOf(message.charAt(i));
-			int keyVal = (shiftKey + charPos) % 26;
-			char replaceVal = ALPHA.charAt(keyVal);
-			cipherText += replaceVal;
+		char[] charMessage = message.toCharArray();
+		
+		for (char ch : charMessage) {
+			if(Character.isLowerCase(ch))
+				cipherText += (char) ((ch - 'a' + shiftKey) % 26 + 'a');
+			else if(Character.isUpperCase(ch))
+				cipherText += (char) ((ch + shiftKey - 'A') % 26 + 'A');
+			else 
+				cipherText += ch;
 		}
 
 		return cipherText;
 	}
 
 	public String decrypt(String cipherText) {
-
-		cipherText = cipherText.toUpperCase();
-
+		
 		String message = "";
-		for (int i = 0; i < cipherText.length(); i++) {
-			int charPos = ALPHA.indexOf(cipherText.charAt(i));
-			int keyVal = (charPos - shiftKey) % 26;
-
-			if (keyVal < 0) {
-				keyVal += 26;
-			}
-
-			char replaceVal = ALPHA.charAt(keyVal);
-			message += replaceVal;
+		char[] charMessage = cipherText.toCharArray();
+		
+		for (char ch : charMessage) {
+			if (Character.isUpperCase(ch))
+				message += (char) ((ch - 'A' - shiftKey + 26) % 26 + 'A');
+			else if (Character.isLowerCase(ch))
+				message += (char) ((ch - 'a' - shiftKey + 26) % 26 + 'a');
+			else
+				message += ch;
 		}
 
 		return message;

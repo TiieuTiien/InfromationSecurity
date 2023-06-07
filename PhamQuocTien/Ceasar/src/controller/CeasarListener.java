@@ -24,6 +24,8 @@ public class CeasarListener implements ActionListener{
 			this.ceasarView.seteCipherTextField(this.ceasarView.encrypt());
 		}else if(command == "Decrypt") {
 			this.ceasarView.setdPlainTextField(this.ceasarView.decrypt());
+		}else if(command == "Set") {
+			this.ceasarView.setdCipherText(this.ceasarView.set());
 		}
 	}
 	
