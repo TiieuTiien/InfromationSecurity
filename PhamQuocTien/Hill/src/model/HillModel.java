@@ -63,24 +63,19 @@ public class HillModel {
 
 	// Decode
 	public static int findInverse(int a) {
-		int r0 = 101, r1 = a, r2 = 1, t0 = 0, t1 = 1, q = r0 / r1;
-		while (r1 > 0) {
-			r2 = r0 % r1;
-			if(r2==0)
-				break;
-			q = r0 / r1;
-			t1 = q - t0 * t1;
-			r0=r1;
+		int q = 0, r0 = 101, r1 = a, r2 = 0, s0 = 1, s1 = 0, s2 = 0, t0 = 0, t1 = 1, t2 =0, i = 1;
+		while(r1!=0) {
+			q = r0/r1;
+			r2=r0%r1;
+			r0 = r1;
 			r1=r2;
+			s2=s0-q*s1;
+			s0=s1;
+			t2=t0-q*t1;
 			t0=t1;
+			t1=t2;
+			i++;
 		}
-		sysou
-		if(r1 > 1)
-			return -1;
-		else if (t1 > 0)
-			return t1;
-		else
-			return t1+26;
 	}
 
 	// Function to implement Hill Cipher
