@@ -157,25 +157,6 @@ public class HillModel {
 		return cofactor;
 	}
 
-	public String decrypt(String cipherText, String key) {
-		int[][] keyMatrix = getKeyMatrix(key);
-		int[][] inverseMatrix = invertMatrix(keyMatrix);
-		int[][] cipherMatrix = new int[1][3];
-
-		for (int i = 0; i < 3; i++)
-			cipherMatrix[0][i] = cipherText.charAt(i) - 'A';
-
-		int[][] plainMatrix = matrixMultiply(cipherMatrix, inverseMatrix);
-
-		String plainText = "";
-		for(int i = 0; i < 3; i++) {
-			plainText += (char) (plainMatrix[0][i] + 'A');
-		}
-		return plainText;
-	}
-
-	// Decode
-
 	// Following function encrypts the message
 	public String encrypt() {
 
@@ -184,7 +165,6 @@ public class HillModel {
 
 		// Generate vector for the message
 		int[][] messageVector = new int[1][3];
-
 		for (int i = 0; i < 3; i++)
 			messageVector[0][i] = this.message.charAt(i) % 65;
 
@@ -192,12 +172,35 @@ public class HillModel {
 		int[][] cipherMatrix = matrixMultiply(messageVector, keyMatrix);
 
 		String CipherText = "";
-
 		for (int i = 0; i < 3; i++) {
 			CipherText += (char) (cipherMatrix[0][i] + 'A');
 		}
 
 		return CipherText;
+	}
+
+	// Following function decrypts the message
+	public String decrypt(String cipherText, String key) {
+		
+		// Get key matrix from the key string
+		int[][] keyMatrix = getKeyMatrix(this.key);
+		
+		// Calculate inverse matrix of keyMatrix
+		int[][] inverseMatrix = invertMatrix(keyMatrix);
+		
+		// Get cipherMatrix from CipherText
+		int[][] cipherMatrix = new int[1][3];
+		for (int i = 0; i < 3; i++)
+			cipherMatrix[0][i] = cipherText.charAt(i) - 'A';
+	
+		// Decrypt cipherMatrix
+		int[][] plainMatrix = matrixMultiply(cipherMatrix, inverseMatrix);
+	
+		String plainText = "";
+		for(int i = 0; i < 3; i++) {
+			plainText += (char) (plainMatrix[0][i] + 'A');
+		}
+		return plainText;
 	}
 
 	public static void main(String[] args) {
@@ -208,13 +211,13 @@ public class HillModel {
 		System.out.println("Plaintext: " + hill.message);
 
 		// Encrypting
-		String CipherText = hill.encrypt();
+		String cipherText = hill.encrypt();
 
 		// Finally print the ciphertext
-		System.out.print("Ciphertext:" + CipherText);
+		System.out.print("Ciphertext:" + cipherText);
 		
 		// Decrypting
-		String PlainText = hill.decrypt(CipherText, hill.key);
+		String PlainText = hill.decrypt(cipherText, hill.key);
 		
 		System.out.println("\nPlaintext: "+PlainText);
 	}
