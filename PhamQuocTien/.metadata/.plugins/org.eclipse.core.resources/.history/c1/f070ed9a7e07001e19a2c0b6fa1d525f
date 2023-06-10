@@ -1,0 +1,216 @@
+package model;
+
+import java.math.BigInteger;
+import java.util.Random;
+
+public class RSAModel {
+
+	private BigInteger p, q;
+	private BigInteger n;
+	private BigInteger phiN;
+	private BigInteger e;
+	private BigInteger d;
+
+	public RSAModel() {
+		this.p = generatePrimeNumber();
+		this.q = generatePrimeNumber();
+		this.n = p.multiply(q);
+		this.phiN = findLCM(p.subtract(BigInteger.ONE), q.subtract(BigInteger.ONE));
+		this.e = findPublicExponent(phiN);
+		this.d = findModInverse(e, phiN);
+	}
+
+	public BigInteger getP() {
+		return p;
+	}
+
+	public void setP(BigInteger p) {
+		this.p = p;
+	}
+
+	public BigInteger getQ() {
+		return q;
+	}
+
+	public void setQ(BigInteger q) {
+		this.q = q;
+	}
+
+	public BigInteger getN() {
+		return n;
+	}
+
+	public void setN(BigInteger n) {
+		this.n = n;
+	}
+
+	public BigInteger getPhiN() {
+		return phiN;
+	}
+
+	public void setPhiN(BigInteger phiN) {
+		this.phiN = phiN;
+	}
+
+	public BigInteger getE() {
+		return e;
+	}
+
+	public void setE(BigInteger e) {
+		this.e = e;
+	}
+
+	public BigInteger getD() {
+		return d;
+	}
+
+	public void setD(BigInteger d) {
+		this.d = d;
+	}
+
+	// STEP 1: Choose two distinct prime numbers, p and q.
+	public boolean isPrime(int number) {
+		if (number <= 1) {
+			return false;
+		}
+
+		for (int i = 2; i <= Math.sqrt(number); i++) {
+			if (number % i == 0) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	// Generate a prime
+	public BigInteger generatePrimeNumber() {
+		return generatePrimeNumber(50);
+	}
+
+	// Generate a different prime
+	public static BigInteger generatePrimeNumber(int numDigits) {
+        BigInteger prime;
+        Random random = new Random();
+        
+        do {
+            StringBuilder sb = new StringBuilder(numDigits);
+
+            // Generate random digits
+            for (int i = 0; i < numDigits; i++) {
+                int digit = random.nextInt(10); // Generate a random digit from 0 to 9
+                sb.append(digit);
+            }
+
+            // Convert the generated digits to a BigInteger
+            BigInteger candidate = new BigInteger(sb.toString());
+
+            // Check if the candidate is prime using the isProbablePrime() method
+            boolean isPrime = candidate.isProbablePrime(100); // Adjust the certainty level as needed
+
+            if (isPrime) {
+                prime = candidate;
+                break;
+            }
+        } while (true);
+
+        return prime;
+    }
+
+	// STEP 2: Compute their product, n = p * q.
+	// This is the modulus for both the public and private keys. NO NEED TO WRITE
+	// FUNCTION
+
+	// STEP 3: Compute Euler's totient function, φ(n) = lcm((p - 1),(q - 1)),
+	// which represents the number of positive integers less than n that are coprime
+	// to n.
+	public static BigInteger findLCM(BigInteger a, BigInteger b) {
+		// Calculate the absolute value of a*b
+		BigInteger absProduct = a.multiply(b).abs();
+
+		// Calculate the GCD using the gcd() method
+		BigInteger gcd = a.gcd(b);
+
+		// Calculate the LCM using the formula LCM(a, b) = |(a * b)| / GCD(a, b)
+		BigInteger lcm = absProduct.divide(gcd);
+
+		return lcm;
+	}
+
+	// STEP 4: Choose an integer e such that 1 < e < φ(n), and e is coprime with
+	// φ(n).
+	// This is the public exponent, which forms the public key.
+	public static BigInteger findPublicExponent(BigInteger phiN) {
+		BigInteger publicExponent;
+
+		do {
+			// Generate a random public exponent
+			publicExponent = new BigInteger(phiN.bitLength(), new Random());
+		} while (publicExponent.compareTo(BigInteger.ONE) <= 0 || publicExponent.compareTo(phiN) >= 0
+				|| !publicExponent.gcd(phiN).equals(BigInteger.ONE));
+
+		return publicExponent;
+	}
+
+	// STEP 5: Compute the modular multiplicative inverse of e * modulo φ(n).
+	// This is an integer d, such that (d * e) % φ(n) = 1.
+	// d is the private exponent, forming the private key.
+	public static BigInteger findModInverse(BigInteger number, BigInteger modulus) {
+		// Calculate the modular inverse using the modInverse() method
+		BigInteger modInverse = number.modInverse(modulus);
+
+		return modInverse;
+	}
+
+	// Function require to perform tasks
+	public int mod(int a, int n) {
+		return (a % n + n) % n;
+	}
+
+	public String textToNum(String plainText) {
+		String numbers = "";
+
+		char[] plainChar = plainText.toCharArray();
+
+		for (char ch : plainChar) {
+			int text = ch;
+
+			numbers += (text < 100) ? "0" + text : text;
+		}
+
+		return numbers;
+	}
+
+	public String NumToText(String plainText) {
+		String text = "";
+
+		char[] plainChar = plainText.toCharArray();
+
+		for (char ch : plainChar) {
+			int numbers = ch;
+
+			text += (numbers < 100) ? "0" + numbers : numbers;
+		}
+
+		return text;
+	}
+
+	// Encryption
+	public String encrypt(String plainText) {
+		plainText = textToNum(plainText);
+		BigInteger cipherNum = new BigInteger(plainText);
+
+		cipherNum = cipherNum.modPow(this.e, this.n);
+
+		return cipherNum.toString();
+	}
+
+	// Decryption
+	public String decryptArray(String cipherText) {
+		BigInteger message = new BigInteger(cipherText);
+
+		message = message.modPow(this.d, this.n);
+
+		return message.toString();
+	}
+}

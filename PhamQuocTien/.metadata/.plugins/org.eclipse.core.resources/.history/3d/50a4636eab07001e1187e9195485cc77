@@ -1,0 +1,501 @@
+package view;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
+
+import controller.RSAListener;
+import model.RSAModel;
+
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import java.awt.FlowLayout;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
+import java.awt.GridLayout;
+import java.awt.HeadlessException;
+import java.awt.SystemColor;
+import java.awt.Font;
+import javax.swing.JTextPane;
+import java.awt.event.ActionListener;
+import java.math.BigInteger;
+import java.awt.event.ActionEvent;
+import javax.swing.JEditorPane;
+import javax.swing.JTextArea;
+import javax.swing.JSpinner;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+
+public class RSAView extends JFrame {
+
+	private RSAModel rsaModel;
+	private JPanel contentPane;
+	private JTextArea ePlainArea;
+	private JTextArea eCipherArea;
+	private JTextArea dCipherArea;
+	private JTextArea dPlainArea;
+	private JSpinner numberOfCharSpiner;
+	private JTextArea privateKeyArea;
+	private JTextArea publicKeyArea;
+	private JTextArea eKeyArea;
+	private JTextArea dKeyArea;
+
+	/**
+	 * Create the frame.
+	 */
+	public RSAView() {
+		RSAListener rsaListener = new RSAListener(this);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 600, 530);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[] { 0, 0 };
+		gbl_contentPane.rowHeights = new int[] { 130, 0, 0 };
+		gbl_contentPane.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
+		gbl_contentPane.rowWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+		contentPane.setLayout(gbl_contentPane);
+
+		Border rsaBorder = new TitledBorder(new LineBorder(Color.gray), "RSA", TitledBorder.CENTER,
+				TitledBorder.CENTER);
+		contentPane.setBorder(rsaBorder);
+
+		JPanel keyGenPanel = new JPanel();
+		GridBagConstraints gbc_keyGenPanel = new GridBagConstraints();
+		gbc_keyGenPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_keyGenPanel.fill = GridBagConstraints.BOTH;
+		gbc_keyGenPanel.gridx = 0;
+		gbc_keyGenPanel.gridy = 0;
+		contentPane.add(keyGenPanel, gbc_keyGenPanel);
+
+		Border keyBorder = new TitledBorder(new LineBorder(Color.gray), "Key generater", TitledBorder.LEFT,
+				TitledBorder.CENTER);
+		keyGenPanel.setBorder(keyBorder);
+		GridBagLayout gbl_keyGenPanel = new GridBagLayout();
+		gbl_keyGenPanel.columnWidths = new int[] { 564, 0 };
+		gbl_keyGenPanel.rowHeights = new int[] { 67, 30, 30, 0 };
+		gbl_keyGenPanel.columnWeights = new double[] { 0.0, Double.MIN_VALUE };
+		gbl_keyGenPanel.rowWeights = new double[] { 1.0, 0.0, 0.0, Double.MIN_VALUE };
+		keyGenPanel.setLayout(gbl_keyGenPanel);
+
+		JPanel keyPanel = new JPanel();
+		GridBagConstraints gbc_keyPanel = new GridBagConstraints();
+		gbc_keyPanel.fill = GridBagConstraints.BOTH;
+		gbc_keyPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_keyPanel.gridx = 0;
+		gbc_keyPanel.gridy = 0;
+		keyGenPanel.add(keyPanel, gbc_keyPanel);
+		GridBagLayout gbl_keyPanel = new GridBagLayout();
+		gbl_keyPanel.columnWidths = new int[] { 50, 86, 50, 86, 0 };
+		gbl_keyPanel.rowHeights = new int[] { 24, 0 };
+		gbl_keyPanel.columnWeights = new double[] { 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_keyPanel.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
+		keyPanel.setLayout(gbl_keyPanel);
+
+		JLabel privateKeyGenLabel = new JLabel("Private Key");
+		privateKeyGenLabel.setVerticalAlignment(SwingConstants.TOP);
+		privateKeyGenLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		GridBagConstraints gbc_privateKeyGenLabel = new GridBagConstraints();
+		gbc_privateKeyGenLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_privateKeyGenLabel.gridx = 0;
+		gbc_privateKeyGenLabel.gridy = 0;
+		keyPanel.add(privateKeyGenLabel, gbc_privateKeyGenLabel);
+
+		JScrollPane scrollPane = new JScrollPane();
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 1;
+		gbc_scrollPane.gridy = 0;
+		keyPanel.add(scrollPane, gbc_scrollPane);
+
+		privateKeyArea = new JTextArea();
+		privateKeyArea.setWrapStyleWord(true);
+		scrollPane.setViewportView(privateKeyArea);
+
+		JLabel publicKeyGenLabel = new JLabel("Public Key");
+		publicKeyGenLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		publicKeyGenLabel.setVerticalAlignment(SwingConstants.TOP);
+		GridBagConstraints gbc_publicKeyGenLabel = new GridBagConstraints();
+		gbc_publicKeyGenLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_publicKeyGenLabel.gridx = 2;
+		gbc_publicKeyGenLabel.gridy = 0;
+		keyPanel.add(publicKeyGenLabel, gbc_publicKeyGenLabel);
+
+		JScrollPane scrollPane_1 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
+		gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_1.gridx = 3;
+		gbc_scrollPane_1.gridy = 0;
+		keyPanel.add(scrollPane_1, gbc_scrollPane_1);
+
+		publicKeyArea = new JTextArea();
+		scrollPane_1.setViewportView(publicKeyArea);
+
+		JPanel numberOfCharPanel = new JPanel();
+		GridBagConstraints gbc_numberOfCharPanel = new GridBagConstraints();
+		gbc_numberOfCharPanel.fill = GridBagConstraints.BOTH;
+		gbc_numberOfCharPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_numberOfCharPanel.gridx = 0;
+		gbc_numberOfCharPanel.gridy = 1;
+		keyGenPanel.add(numberOfCharPanel, gbc_numberOfCharPanel);
+
+		JLabel numberOfCharLabel = new JLabel("How many character(s) you want to encrypt?");
+		numberOfCharPanel.add(numberOfCharLabel);
+
+		numberOfCharSpiner = new JSpinner();
+		numberOfCharPanel.add(numberOfCharSpiner);
+		numberOfCharSpiner.setValue(15);
+
+		JPanel GenPanel = new JPanel();
+		GridBagConstraints gbc_GenPanel = new GridBagConstraints();
+		gbc_GenPanel.fill = GridBagConstraints.BOTH;
+		gbc_GenPanel.gridx = 0;
+		gbc_GenPanel.gridy = 2;
+		keyGenPanel.add(GenPanel, gbc_GenPanel);
+
+		JButton keyGenButt = new JButton("Generate");
+		keyGenButt.addActionListener(rsaListener);
+		keyGenButt.setBackground(Color.WHITE);
+		keyGenButt.setFocusPainted(false);
+		keyGenButt.setVerticalAlignment(SwingConstants.BOTTOM);
+		GenPanel.add(keyGenButt);
+
+		JButton setEKeyButt = new JButton("Set Encrypt key");
+		setEKeyButt.addActionListener(rsaListener);
+		setEKeyButt.setForeground(Color.BLACK);
+		setEKeyButt.setFocusPainted(false);
+		setEKeyButt.setBackground(Color.WHITE);
+		GenPanel.add(setEKeyButt);
+
+		JButton setDKeyButt = new JButton("Set Decrypt key");
+		setDKeyButt.addActionListener(rsaListener);
+		setDKeyButt.setForeground(Color.BLACK);
+		setDKeyButt.setFocusPainted(false);
+		setDKeyButt.setBackground(Color.WHITE);
+		GenPanel.add(setDKeyButt);
+
+		JPanel cipherPanel = new JPanel();
+		GridBagConstraints gbc_cipherPanel = new GridBagConstraints();
+		gbc_cipherPanel.fill = GridBagConstraints.BOTH;
+		gbc_cipherPanel.gridx = 0;
+		gbc_cipherPanel.gridy = 1;
+		contentPane.add(cipherPanel, gbc_cipherPanel);
+		cipherPanel.setLayout(new GridLayout(0, 2, 0, 0));
+
+		JPanel encrypt = new JPanel();
+		cipherPanel.add(encrypt);
+
+		Border encryptBorder = new TitledBorder(new LineBorder(Color.gray), "Encrypt", TitledBorder.LEFT,
+				TitledBorder.CENTER);
+		encrypt.setBorder(encryptBorder);
+		GridBagLayout gbl_encrypt = new GridBagLayout();
+		gbl_encrypt.columnWidths = new int[]{277, 0};
+		gbl_encrypt.rowHeights = new int[]{50, 90, 32, 0};
+		gbl_encrypt.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_encrypt.rowWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
+		encrypt.setLayout(gbl_encrypt);
+		
+				JPanel eKeyPanel = new JPanel();
+				GridBagConstraints gbc_eKeyPanel = new GridBagConstraints();
+				gbc_eKeyPanel.fill = GridBagConstraints.HORIZONTAL;
+				gbc_eKeyPanel.insets = new Insets(0, 0, 5, 0);
+				gbc_eKeyPanel.gridx = 0;
+				gbc_eKeyPanel.gridy = 0;
+				encrypt.add(eKeyPanel, gbc_eKeyPanel);
+				eKeyPanel.setLayout(new GridLayout(0, 2, 5, 5));
+				
+						JLabel ePublicKeyLabel = new JLabel("Public Key");
+						ePublicKeyLabel.setHorizontalAlignment(SwingConstants.CENTER);
+						eKeyPanel.add(ePublicKeyLabel);
+						
+								JScrollPane eKeyAreaPanel = new JScrollPane();
+								eKeyPanel.add(eKeyAreaPanel);
+								
+										eKeyArea = new JTextArea();
+										eKeyArea.setRows(2);
+										eKeyAreaPanel.setViewportView(eKeyArea);
+										eKeyArea.setColumns(10);
+				
+						JPanel eTextPanel = new JPanel();
+						eTextPanel.setForeground(Color.BLACK);
+						eTextPanel.setBackground(SystemColor.menu);
+						GridBagConstraints gbc_eTextPanel = new GridBagConstraints();
+						gbc_eTextPanel.fill = GridBagConstraints.BOTH;
+						gbc_eTextPanel.insets = new Insets(0, 0, 5, 0);
+						gbc_eTextPanel.gridx = 0;
+						gbc_eTextPanel.gridy = 1;
+						encrypt.add(eTextPanel, gbc_eTextPanel);
+						eTextPanel.setLayout(new GridLayout(2, 2, 5, 5));
+						
+								JLabel ePlainLabel = new JLabel("Plain text:");
+								ePlainLabel.setVerticalAlignment(SwingConstants.TOP);
+								ePlainLabel.setHorizontalAlignment(SwingConstants.CENTER);
+								ePlainLabel.setForeground(Color.BLACK);
+								eTextPanel.add(ePlainLabel);
+										
+										JScrollPane ePlainScroll = new JScrollPane();
+										eTextPanel.add(ePlainScroll);
+								
+										ePlainArea = new JTextArea();
+										ePlainArea.setWrapStyleWord(true);
+										ePlainScroll.setViewportView(ePlainArea);
+										
+												JLabel eCipherLabel = new JLabel("Cipher text:");
+												eCipherLabel.setVerticalAlignment(SwingConstants.TOP);
+												eCipherLabel.setHorizontalAlignment(SwingConstants.CENTER);
+												eCipherLabel.setForeground(Color.BLACK);
+												eTextPanel.add(eCipherLabel);
+														
+														JScrollPane eCipherScroll = new JScrollPane();
+														eTextPanel.add(eCipherScroll);
+												
+														eCipherArea = new JTextArea();
+														eCipherScroll.setViewportView(eCipherArea);
+		
+				JPanel encryptButtPanel = new JPanel();
+				encryptButtPanel.setForeground(Color.BLACK);
+				encryptButtPanel.setBackground(SystemColor.menu);
+				GridBagConstraints gbc_encryptButtPanel = new GridBagConstraints();
+				gbc_encryptButtPanel.fill = GridBagConstraints.HORIZONTAL;
+				gbc_encryptButtPanel.anchor = GridBagConstraints.NORTH;
+				gbc_encryptButtPanel.gridx = 0;
+				gbc_encryptButtPanel.gridy = 2;
+				encrypt.add(encryptButtPanel, gbc_encryptButtPanel);
+				
+						JButton encryptButt = new JButton("Encrypt");
+						encryptButt.addActionListener(rsaListener);
+						encryptButt.setForeground(Color.BLACK);
+						encryptButt.setFocusPainted(false);
+						encryptButt.setBackground(Color.WHITE);
+						encryptButtPanel.add(encryptButt);
+						
+								JButton eSetButt = new JButton("Set Cipher text");
+								eSetButt.addActionListener(rsaListener);
+								eSetButt.setForeground(Color.BLACK);
+								eSetButt.setFocusPainted(false);
+								eSetButt.setBackground(Color.WHITE);
+								encryptButtPanel.add(eSetButt);
+
+		JPanel decrypt = new JPanel();
+		cipherPanel.add(decrypt);
+
+		Border decryptBorder = new TitledBorder(new LineBorder(Color.gray), "Decrypt", TitledBorder.LEFT,
+				TitledBorder.CENTER);
+		decrypt.setBorder(decryptBorder);
+		GridBagLayout gbl_decrypt = new GridBagLayout();
+		gbl_decrypt.columnWidths = new int[]{277, 0};
+		gbl_decrypt.rowHeights = new int[]{50, 90, 32, 0};
+		gbl_decrypt.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_decrypt.rowWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
+		decrypt.setLayout(gbl_decrypt);
+				
+						JPanel dKeyPanel = new JPanel();
+						GridBagConstraints gbc_dKeyPanel = new GridBagConstraints();
+						gbc_dKeyPanel.fill = GridBagConstraints.HORIZONTAL;
+						gbc_dKeyPanel.insets = new Insets(0, 0, 5, 0);
+						gbc_dKeyPanel.gridx = 0;
+						gbc_dKeyPanel.gridy = 0;
+						decrypt.add(dKeyPanel, gbc_dKeyPanel);
+						dKeyPanel.setLayout(new GridLayout(0, 2, 5, 5));
+						
+								JLabel dKeyLabel = new JLabel("Private Key");
+								dKeyLabel.setHorizontalAlignment(SwingConstants.CENTER);
+								dKeyPanel.add(dKeyLabel);
+								
+										JScrollPane dKeyAreaPanel = new JScrollPane();
+										dKeyPanel.add(dKeyAreaPanel);
+										
+												dKeyArea = new JTextArea();
+												dKeyArea.setRows(2);
+												dKeyAreaPanel.setViewportView(dKeyArea);
+		
+				JPanel dTextPanel = new JPanel();
+				dTextPanel.setForeground(Color.BLACK);
+				dTextPanel.setBackground(SystemColor.menu);
+				GridBagConstraints gbc_dTextPanel = new GridBagConstraints();
+				gbc_dTextPanel.fill = GridBagConstraints.BOTH;
+				gbc_dTextPanel.insets = new Insets(0, 0, 5, 0);
+				gbc_dTextPanel.gridx = 0;
+				gbc_dTextPanel.gridy = 1;
+				decrypt.add(dTextPanel, gbc_dTextPanel);
+				dTextPanel.setLayout(new GridLayout(2, 2, 5, 5));
+				
+						JLabel dCipherLabel = new JLabel("Cipher text:");
+						dCipherLabel.setVerticalAlignment(SwingConstants.TOP);
+						dCipherLabel.setHorizontalAlignment(SwingConstants.CENTER);
+						dCipherLabel.setForeground(Color.BLACK);
+						dTextPanel.add(dCipherLabel);
+								
+								JScrollPane dCipherScroll = new JScrollPane();
+								dTextPanel.add(dCipherScroll);
+						
+								dCipherArea = new JTextArea();
+								dCipherScroll.setViewportView(dCipherArea);
+								
+										JLabel dPlainLabel = new JLabel("Plain text:");
+										dPlainLabel.setVerticalAlignment(SwingConstants.TOP);
+										dPlainLabel.setHorizontalAlignment(SwingConstants.CENTER);
+										dPlainLabel.setForeground(Color.BLACK);
+										dTextPanel.add(dPlainLabel);
+												
+												JScrollPane dPlainScroll = new JScrollPane();
+												dTextPanel.add(dPlainScroll);
+										
+												dPlainArea = new JTextArea();
+												dPlainScroll.setViewportView(dPlainArea);
+		
+				JPanel decryptButtPanel = new JPanel();
+				decryptButtPanel.setForeground(Color.BLACK);
+				decryptButtPanel.setBackground(SystemColor.menu);
+				GridBagConstraints gbc_decryptButtPanel = new GridBagConstraints();
+				gbc_decryptButtPanel.fill = GridBagConstraints.HORIZONTAL;
+				gbc_decryptButtPanel.anchor = GridBagConstraints.NORTH;
+				gbc_decryptButtPanel.gridx = 0;
+				gbc_decryptButtPanel.gridy = 2;
+				decrypt.add(decryptButtPanel, gbc_decryptButtPanel);
+				
+						JButton decryptButt = new JButton("Decrypt");
+						decryptButt.addActionListener(rsaListener);
+						decryptButt.setForeground(Color.BLACK);
+						decryptButt.setFocusPainted(false);
+						decryptButt.setBackground(Color.WHITE);
+						decryptButtPanel.add(decryptButt);
+						
+								JButton dSetButt = new JButton("Set Plain text");
+								dSetButt.addActionListener(rsaListener);
+								dSetButt.setForeground(Color.BLACK);
+								dSetButt.setFocusPainted(false);
+								dSetButt.setBackground(Color.WHITE);
+								decryptButtPanel.add(dSetButt);
+	}
+
+	public RSAModel getRsaModel() {
+		return rsaModel;
+	}
+
+	public String geteKeyArea() {
+		return eKeyArea.getText().toString();
+	}
+
+	public String getdKeyArea() {
+		return dKeyArea.getText().toString();
+	}
+
+	public String getePlainArea() {
+		return ePlainArea.getText().toString();
+	}
+
+	public String geteCipherArea() {
+		return eCipherArea.getText().toString();
+	}
+
+	public String getdCipherArea() {
+		return dCipherArea.getText().toString();
+	}
+
+	public String getdPlainArea() {
+		return dPlainArea.getText().toString();
+	}
+
+	public int getNumberOfCharSpiner() {
+		return (int) numberOfCharSpiner.getValue();
+	}
+
+	public String getPrivateKeyArea() {
+		return privateKeyArea.getText().toString();
+	}
+
+	public String getPublicKeyArea() {
+		return publicKeyArea.getText().toString();
+	}
+
+	public void setRsaModel(RSAModel rsaModel) {
+		this.rsaModel = rsaModel;
+	}
+
+	public void seteKeyArea(String str) {
+		this.eKeyArea.setText(str);
+	}
+
+	public void setdKeyArea(String str) {
+		this.dKeyArea.setText(str);
+	}
+
+	public void setePlainArea(String str) {
+		this.ePlainArea.setText(str);
+	}
+
+	public void seteCipherArea(String str) {
+		this.eCipherArea.setText(str);
+	}
+
+	public void setdCipherArea(String str) {
+		this.dCipherArea.setText(str);
+	}
+
+	public void setdPlainArea(String str) {
+		this.dPlainArea.setText(str);
+	}
+
+	public void setNumberOfCharSpiner(int number) {
+		this.numberOfCharSpiner.setValue(number);
+	}
+
+	public void setPrivateKeyArea(String str) {
+		this.privateKeyArea.setText(str);
+	}
+
+	public void setPublicKeyArea(String str) {
+		this.publicKeyArea.setText(str);
+	}
+
+	public String[] generate() {
+		int digits = Integer.valueOf(this.getNumberOfCharSpiner());
+		digits *= 1.6;
+
+		this.rsaModel = new RSAModel(digits);
+		String[] key = new String[3];
+
+		key[0] = this.rsaModel.getD().toString();
+		key[1] = this.rsaModel.getE().toString();
+		key[2] = this.rsaModel.getN().toString();
+
+		return key;
+	}
+
+	public String encrypt(String str, BigInteger n) {
+
+		this.rsaModel.setN(n);
+
+		BigInteger e = new BigInteger(this.geteKeyArea());
+
+		this.rsaModel.setE(e);
+
+		return this.rsaModel.encrypt(str);
+	}
+
+	public String decrypt(String str, BigInteger n) {
+
+		this.rsaModel.setN(n);
+
+		BigInteger d = new BigInteger(this.getdKeyArea());
+
+		this.rsaModel.setE(d);
+
+		return this.rsaModel.decrypt(str);
+	}
+
+}
