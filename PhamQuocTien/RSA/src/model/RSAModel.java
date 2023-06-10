@@ -10,6 +10,10 @@ public class RSAModel {
 	private BigInteger phiN;
 	private BigInteger e;
 	private BigInteger d;
+	
+	public RSAModel() {
+		new RSAModel(10);
+	}
 
 	public RSAModel(int digits) {
 		this.p = generatePrimeNumber(digits);
