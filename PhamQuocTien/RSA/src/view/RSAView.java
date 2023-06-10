@@ -389,6 +389,42 @@ public class RSAView extends JFrame {
 		decryptButtPanel.add(dSetButt);
 	}
 
+	public String[] generate() {
+		int digits = Integer.valueOf(this.getNumberOfCharSpiner());
+		digits *= 1.6;
+	
+		this.rsaModel = new RSAModel(digits);
+		String[] key = new String[3];
+	
+		key[0] = this.rsaModel.getD().toString();
+		key[1] = this.rsaModel.getE().toString();
+		key[2] = this.rsaModel.getN().toString();
+	
+		return key;
+	}
+
+	public String encrypt(String str, BigInteger n) {
+	
+		this.rsaModel.setN(n);
+	
+		BigInteger e = new BigInteger(this.geteKeyArea());
+	
+		this.rsaModel.setE(e);
+	
+		return this.rsaModel.encrypt(str);
+	}
+
+	public String decrypt(String str, BigInteger n) {
+	
+		this.rsaModel.setN(n);
+	
+		BigInteger d = new BigInteger(this.getdKeyArea());
+	
+		this.rsaModel.setE(d);
+	
+		return this.rsaModel.decrypt(str);
+	}
+
 	public RSAModel getRsaModel() {
 		return rsaModel;
 	}
@@ -467,42 +503,6 @@ public class RSAView extends JFrame {
 
 	public void setPublicKeyArea(String str) {
 		this.publicKeyArea.setText(str);
-	}
-
-	public String[] generate() {
-		int digits = Integer.valueOf(this.getNumberOfCharSpiner());
-		digits *= 1.6;
-
-		this.rsaModel = new RSAModel(digits);
-		String[] key = new String[3];
-
-		key[0] = this.rsaModel.getD().toString();
-		key[1] = this.rsaModel.getE().toString();
-		key[2] = this.rsaModel.getN().toString();
-
-		return key;
-	}
-
-	public String encrypt(String str, BigInteger n) {
-
-		this.rsaModel.setN(n);
-
-		BigInteger e = new BigInteger(this.geteKeyArea());
-
-		this.rsaModel.setE(e);
-
-		return this.rsaModel.encrypt(str);
-	}
-
-	public String decrypt(String str, BigInteger n) {
-
-		this.rsaModel.setN(n);
-
-		BigInteger d = new BigInteger(this.getdKeyArea());
-
-		this.rsaModel.setE(d);
-
-		return this.rsaModel.decrypt(str);
 	}
 
 }
