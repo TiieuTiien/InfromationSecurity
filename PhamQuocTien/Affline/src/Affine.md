@@ -12,6 +12,7 @@ It is a relatively simple encryption technique that involves a mathematical func
 + 'C' represents the corresponding ciphertext letter.
 + The modulus operation ensures that 'C' stays within the range of the alphabet (26 letters).
 4. Repeat steps 2-3 for each letter in the plaintext to obtain the complete ciphertext.
+
 **Decryption**
 1. Calculate the modular multiplicative inverse of 'a' modulo 26. Let's denote it as 'a^(-1)'.
 + The multiplicative inverse exists only if 'a' is coprime with 26.
