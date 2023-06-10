@@ -3,16 +3,16 @@ Here's a step-by-step explanation of how RSA encryption and decryption work:
 
 Step 1: Key Generation
 
-1. Choose two distinct prime numbers, p and q.
-2. Compute their product, n = p * q. This is the modulus for both the public and private keys.
-3. Compute Euler's totient function, φ(n) = (p - 1) * (q - 1), which represents the number of positive integers less than n that are coprime to n.
-4. Choose an integer e such that 1 < e < φ(n), and e is coprime with φ(n). This is the public exponent, which forms the public key.
-5. Compute the modular multiplicative inverse of e modulo φ(n). This is an integer d, such that (d * e) % φ(n) = 1. d is the private exponent, forming the private key.
+ + Choose two distinct prime numbers, p and q.
+ + Compute their product, n = p * q. This is the modulus for both the public and private keys.
+ + Compute Euler's totient function, φ(n) = (p - 1) * (q - 1), which represents the number of positive integers less than n that are coprime to n.
+ + Choose an integer e such that 1 < e < φ(n), and e is coprime with φ(n). This is the public exponent, which forms the public key.
+ + Compute the modular multiplicative inverse of e modulo φ(n). This is an integer d, such that (d * e) % φ(n) = 1. d is the private exponent, forming the private key.
 
 Step 2: Encryption
 
-1. Convert the plaintext message to a numerical representation. This can be done using various techniques such as ASCII or Unicode.
-2. Apply the public key (e, n) to encrypt the plaintext message. Calculate the ciphertext, C, using the formula C = M^e mod n, where M is the plaintext message and ^ denotes exponentiation modulo n.
+ + Convert the plaintext message to a numerical representation. This can be done using various techniques such as ASCII or Unicode.
+ + Apply the public key (e, n) to encrypt the plaintext message. Calculate the ciphertext, C, using the formula C = M^e mod n, where M is the plaintext message and ^ denotes exponentiation modulo n.
 
 Step 3: Decryption
 
