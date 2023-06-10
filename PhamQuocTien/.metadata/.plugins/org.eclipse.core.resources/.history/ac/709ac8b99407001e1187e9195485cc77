@@ -1,0 +1,32 @@
+package controller;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import view.RSAView;
+
+public class RSAListener implements ActionListener{
+	
+	private RSAView rsaView;
+
+	public RSAListener(RSAView rsaView) {
+		this.rsaView = rsaView;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String command = e.getActionCommand().toString();
+		
+		if (command == "Generate") {
+			int digits = Integer.valueOf(this.rsaView.getNumberOfCharGenTextField().toString());
+			this.rsaView = new RSAView();
+			String privateKey =  this.rsaView.generatePrivateKey();
+			String publicKey =  this.rsaView.generatePublicKey();
+			this.rsaView.setPrivateKeyTextField(privateKey);
+			this.rsaView.setPrivateKeyTextField(publicKey);
+		}
+		
+	}
+	
+	
+}
