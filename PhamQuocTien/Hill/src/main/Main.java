@@ -1,14 +1,26 @@
 package main;
 
-import model.HillModel;
+import java.awt.EventQueue;
+
+import javax.swing.UIManager;
+
+import view.HillView;
 
 public class Main {
-	// Driver code
+	/**
+	 * Launch the application.
+	 */
 	public static void main(String[] args) {
-		
-		// I can do the "Scanner" thing too but i'm too lazy for that sory teacher
-
-
-//		System.out.println(findInverse(25));
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					HillView frame = new HillView();
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }

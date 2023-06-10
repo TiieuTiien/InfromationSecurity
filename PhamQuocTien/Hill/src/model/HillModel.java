@@ -1,13 +1,18 @@
 package model;
 
+import java.util.Random;
+
 public class HillModel {
 
 	private String message;
 	private String key;
 
-	public HillModel(String message, String key) {
-		this.message = message;
+	public HillModel() {
+	}
+	
+	public HillModel(String key, String message) {
 		this.key = key;
+		this.message = message;
 	}
 
 	public String getMessage() {
@@ -28,6 +33,8 @@ public class HillModel {
 
 	// Following function generates the key matrix for the key string
 	public int[][] getKeyMatrix(String key) {
+		key.toUpperCase();
+		
 		int keyMatrix[][] = new int[3][3];
 		int k = 0;
 		for (int i = 0; i < 3; i++) {
@@ -39,7 +46,7 @@ public class HillModel {
 		return keyMatrix;
 	}
 
-	public int mod(int a, int n) {
+	public static int mod(int a, int n) {
 		return (a % n + n) % n;
 	}
 
@@ -90,7 +97,7 @@ public class HillModel {
 		return result;
 	}
 
-	public int findInverse(int modulus, int number) {
+	public static int findInverse(int modulus, int number) {
 		int r0 = modulus, r1 = number, s0 = 1, s1 = 0, t0 = 0, t1 = 1;
 
 		while (r1 != 0) {
@@ -109,7 +116,7 @@ public class HillModel {
 		}
 
 		if (r0 != 1) {
-			throw new ArithmeticException("Inverse does not exist. Det: " + modulus);
+			return -1;
 		}
 
 		// Adjusting the modular multiplicative inverse to be positive
@@ -118,7 +125,7 @@ public class HillModel {
 		return inverse;
 	}
 
-	public int getDeterminant(int[][] matrix) {
+	public static int getDeterminant(int[][] matrix) {
 		int determinant = 0;
 
 		if (matrix.length == 2) {
@@ -157,34 +164,16 @@ public class HillModel {
 		return cofactor;
 	}
 
-	public String decrypt(String cipherText, String key) {
-		int[][] keyMatrix = getKeyMatrix(key);
-		int[][] inverseMatrix = invertMatrix(keyMatrix);
-		int[][] cipherMatrix = new int[1][3];
-
-		for (int i = 0; i < 3; i++)
-			cipherMatrix[0][i] = cipherText.charAt(i) - 'A';
-
-		int[][] plainMatrix = matrixMultiply(cipherMatrix, inverseMatrix);
-
-		String plainText = "";
-		for(int i = 0; i < 3; i++) {
-			plainText += (char) (plainMatrix[0][i] + 'A');
-		}
-		return plainText;
-	}
-
-	// Decode
-
 	// Following function encrypts the message
 	public String encrypt() {
 
 		// Get key matrix from the key string
 		int[][] keyMatrix = getKeyMatrix(this.key);
 
+		setMessage(message.toUpperCase());
+		
 		// Generate vector for the message
 		int[][] messageVector = new int[1][3];
-
 		for (int i = 0; i < 3; i++)
 			messageVector[0][i] = this.message.charAt(i) % 65;
 
@@ -192,7 +181,6 @@ public class HillModel {
 		int[][] cipherMatrix = matrixMultiply(messageVector, keyMatrix);
 
 		String CipherText = "";
-
 		for (int i = 0; i < 3; i++) {
 			CipherText += (char) (cipherMatrix[0][i] + 'A');
 		}
@@ -200,22 +188,101 @@ public class HillModel {
 		return CipherText;
 	}
 
+	// Following function decrypts the message
+	public String decrypt(String cipherText, String key) {
+		
+		// Get key matrix from the key string
+		int[][] keyMatrix = getKeyMatrix(this.key);
+		
+		// Calculate inverse matrix of keyMatrix
+		int[][] inverseMatrix = invertMatrix(keyMatrix);
+		
+		// Get cipherMatrix from CipherText
+		int[][] cipherMatrix = new int[1][3];
+		for (int i = 0; i < 3; i++)
+			cipherMatrix[0][i] = cipherText.charAt(i) - 'A';
+	
+		// Decrypt cipherMatrix
+		int[][] plainMatrix = matrixMultiply(cipherMatrix, inverseMatrix);
+	
+		String plainText = "";
+		for(int i = 0; i < 3; i++) {
+			plainText += (char) (plainMatrix[0][i] + 'A');
+		}
+		return plainText;
+	}
+	
+    public static int[][] generateKeyMatrix(int N) {
+        Random random = new Random();
+        int[][] key = new int[N][N];
+
+        do {
+            // Generate random key values
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    key[i][j] = random.nextInt(26);  // Generate values between 0 and 25
+                }
+            }
+        } while (findInverse(getDeterminant(key), 26) == -1);
+        
+        return key;
+    }
+    
+    public String keyGen() {
+    	int[][] matrix = generateKeyMatrix(3);
+    	String key = "";
+
+    	for(int i = 0; i < matrix.length; i++) {
+    		for(int j = 0; j < matrix[i].length; j++) {
+    			key += (char)(matrix[i][j] + 'A');
+    		}
+    	}
+    	
+    	return key;
+    }
+    
+    public static void printMatrix(int matrix[][]) {
+    	for(int i = 0; i < matrix.length; i++) {
+    		for(int j = 0; j < matrix[i].length; j++) {
+    			System.out.print(matrix[i][j] + " ");
+    		}
+    		System.out.println();
+    	}
+    }
+    
+    public static void printMatrixChar(int matrix[][]) {
+    	for(int i = 0; i < matrix.length; i++) {
+    		for(int j = 0; j < matrix[i].length; j++) {
+    			System.out.print((char)(matrix[i][j] + 'A') + " ");
+    		}
+    		System.out.println();
+    	}
+    }
+
 	public static void main(String[] args) {
 
-		HillModel hill = new HillModel("MOR", "RRFVSVCCT");
+		HillModel hill = new HillModel("RRFVSVCCT", "mor");
 
 		// Text
 		System.out.println("Plaintext: " + hill.message);
 
 		// Encrypting
-		String CipherText = hill.encrypt();
+		String cipherText = hill.encrypt();
 
 		// Finally print the ciphertext
-		System.out.print("Ciphertext:" + CipherText);
+		System.out.print("Ciphertext:" + cipherText);
 		
 		// Decrypting
-		String PlainText = hill.decrypt(CipherText, hill.key);
+		String PlainText = hill.decrypt(cipherText, hill.key);
 		
 		System.out.println("\nPlaintext: "+PlainText);
+		
+		int[][] matrix = generateKeyMatrix(3);
+		
+		printMatrixChar(matrix);
+		
+		int det = getDeterminant(matrix);
+		System.out.println("Det: " + det);
+		System.out.println("Invs: " + findInverse(det, 26));
 	}
 }
