@@ -181,19 +181,28 @@ public class RSAModel {
 		return numbers;
 	}
 
-	public String NumToText(String plainText) {
-		String text = "";
+	public String convertToAscii(String input) {
+        StringBuilder result = new StringBuilder();
 
-		char[] plainChar = plainText.toCharArray();
+        // Handle the first two characters (if applicable)
+        if (input.length() % 3 != 0 && input.length() >= 2) {
+            String firstTwoDigits = input.substring(0, 2);
+            int asciiValue = Integer.parseInt(firstTwoDigits);
+            char character = (char) asciiValue;
+            result.append(character);
+            input = input.substring(2);
+        }
 
-		for (char ch : plainChar) {
-			int numbers = ch;
+        // Convert the remaining characters in groups of three
+        for (int i = 0; i < input.length(); i += 3) {
+            String digitGroup = input.substring(i, i + 3);
+            int asciiValue = Integer.parseInt(digitGroup);
+            char character = (char) asciiValue;
+            result.append(character);
+        }
 
-			text += (numbers < 100) ? "0" + numbers : numbers;
-		}
-
-		return text;
-	}
+        return result.toString();
+    }
 
 	// Encryption
 	public String encrypt(String plainText) {

@@ -6,4 +6,5 @@
  *
  */
 module RSA {
+	requires java.desktop;
 }
