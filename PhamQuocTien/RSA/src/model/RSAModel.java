@@ -219,11 +219,11 @@ public class RSAModel {
 	}
 
 	// Decryption
-	public String decryptArray(String cipherText) {
+	public String decrypt(String cipherText) {
 		BigInteger message = new BigInteger(cipherText);
 
 		message = message.modPow(this.d, this.n);
 
-		return message.toString();
+		return convertToAscii(message.toString());
 	}
 }
