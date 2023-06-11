@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Random;
-
 public class DESModel {
 	// PC-1 table for key permutation
 	private static final int[] PC1_TABLE = { 57, 49, 41, 33, 25, 17, 9, 1, 58, 50, 42, 34, 26, 18, 10, 2, 59, 51, 43,
@@ -23,7 +21,7 @@ public class DESModel {
 			61, 53, 45, 37, 29, 21, 13, 5, 63, 55, 47, 39, 31, 23, 15, 7 };
 
 	// Define the IP^-1 table as a global constant variable
-	public static final int[] IPInverseTable = { 40, 8, 48, 16, 56, 24, 64, 32, 39, 7, 47, 15, 55, 23, 63, 31, 38, 6,
+	public static final int[] IP_INVERSE_TABLE = { 40, 8, 48, 16, 56, 24, 64, 32, 39, 7, 47, 15, 55, 23, 63, 31, 38, 6,
 			46, 14, 54, 22, 62, 30, 37, 5, 45, 13, 53, 21, 61, 29, 36, 4, 44, 12, 52, 20, 60, 28, 35, 3, 43, 11, 51, 19,
 			59, 27, 34, 2, 42, 10, 50, 18, 58, 26, 33, 1, 41, 9, 49, 17, 57, 25 };
 
@@ -226,7 +224,7 @@ public class DESModel {
 			int row = Integer.parseInt(xored.substring(k, k + 1).concat(xored).substring(k + 5, k + 6), 2);
 			int col = Integer.parseInt(xored.substring(k + 1, k + 5), 2);
 
-			System.out.println("Sub " + (i + 1) + " Row: " + row + " Col: " + col);
+//			System.out.println("Sub " + (i + 1) + " Row: " + row + " Col: " + col);
 			// Perform the S-box lookup and get the substitution value
 			int substitutionValue = S_BOXES[i][row * 16 + col];
 
@@ -281,9 +279,9 @@ public class DESModel {
 		roundKeysLength = roundKeysString.length();
 		xoredLength = xored.length();
 
-		System.out.println("Expanded : " + expandedString + " " + expandedLength);
-		System.out.println("RoundKeys: " + roundKeysString + " " + roundKeysLength);
-		System.out.println("XORed    : " + xored + " " + xoredLength);
+//		System.out.println("Expanded : " + expandedString + " " + expandedLength);
+//		System.out.println("RoundKeys: " + roundKeysString + " " + roundKeysLength);
+//		System.out.println("XORed    : " + xored + " " + xoredLength);
 		long substituted = substitute(xored);
 		long permuted = permute(substituted);
 		return permuted;
@@ -307,7 +305,7 @@ public class DESModel {
 			left = right;
 
 			permutedData = (left << 32) | newRight;
-			System.out.println("Initial Permutation (IP) " + (i + 1) + ": " + Long.toHexString(permutedData));
+//			System.out.println("Initial Permutation (IP) " + (i + 1) + ": " + Long.toHexString(permutedData));
 		}
 
 		// Swap the left and right halves by shifting the entire block and combining it
@@ -315,9 +313,18 @@ public class DESModel {
 		return (permutedData << 32) | (permutedData >>> 32);
 	}
 
-	public static void main(String[] args) {
+	private static long IPInversePermutation(long input) {
 
-		String keyString = "HiWorld!"; // Random key string
+		long permuted = 0;
+		for (int i = 0; i < 64; i++) {
+			int bitPosition = IP_INVERSE_TABLE[i] - 1;
+			long bitValue = (input >> bitPosition) & 1L;
+			permuted |= bitValue << i;
+		}
+		return permuted;
+	}
+
+	public static long encrypt(String keyString, String plainText) {
 
 		// Convert the key string to a 64-bit key
 		long key64Bit = convertKeyTo64Bit(keyString);
@@ -325,9 +332,9 @@ public class DESModel {
 		// Apply PC-1 permutation to the 64-bit key
 		long permutedKey56Bit = permuteKey64(key64Bit, PC1_TABLE);
 
-		System.out.println("Original Key	   : " + keyString);
-		System.out.println("64-bit Key	   : " + key64Bit);
-		System.out.println("Permuted 56-bit Key: " + permutedKey56Bit);
+//		System.out.println("Original Key	   : " + keyString);
+//		System.out.println("64-bit Key	   : " + key64Bit);
+//		System.out.println("Permuted 56-bit Key: " + permutedKey56Bit);
 
 		// Divide the 56-bit key into two 28-bit halves
 		long[] keyHalves = divideKeyIntoHalves(permutedKey56Bit);
@@ -335,29 +342,49 @@ public class DESModel {
 		long C0 = keyHalves[0];
 		long D0 = keyHalves[1];
 
-		System.out.println("Permuted 56-bit Key: " + Long.toHexString(permutedKey56Bit));
-		System.out.println("C0: " + Long.toHexString(C0));
-		System.out.println("D0: " + Long.toHexString(D0));
+//		System.out.println("Permuted 56-bit Key: " + Long.toHexString(permutedKey56Bit));
+//		System.out.println("C0: " + Long.toHexString(C0));
+//		System.out.println("D0: " + Long.toHexString(D0));
 
+		// 2. Round Key Generation:
 		// Perform round key generation
 		long[] roundKeys = generateRoundKeys(C0, D0);
 
-		for (int i = 0; i < roundKeys.length; i++) {
-			System.out.println("Round key " + (i + 1) + ": " + Long.toHexString(roundKeys[i]));
-		}
+//		for (int i = 0; i < roundKeys.length; i++) {
+//			System.out.println("Round key " + (i + 1) + ": " + Long.toHexString(roundKeys[i]));
+//		}
 
-		String message = "Crypting"; // Random input string
+		// 3. Initial Permutation (IP):
+//		System.out.println("Input String       : " + plainText);
 
-		System.out.println("Input String       : " + message);
-
-		long plaintextBlock = stringToPlaintextBlock(message);
+		long plaintextBlock = stringToPlaintextBlock(plainText);
 
 		long permutedData = initialPermutation(plaintextBlock);
 
-		System.out.println("Permuted data      : " + Long.toHexString(permutedData));
+//		System.out.println("Permuted data      : " + Long.toHexString(permutedData));
 
+		// 4. Feistel Structure:
+		// &
+		// 5. Round Function:
+		// &
+		// 6. Final Permutation (FP): inside the feistel
 		long output = feistel(permutedData, roundKeys);
-		System.out.println("Initial Permutation (IP) After swap: " + Long.toHexString(output));
+//		System.out.println("Initial Permutation (IP) After swap: " + Long.toHexString(output));
 
+		// Apply the final permutation, which is the inverse of the initial permutation,
+		// using the "IP-1" table (other name is "FP" table).
+		return IPInversePermutation(output);
+	}
+
+	public static void main(String[] args) {
+
+		String keyString = "HiCipher!";
+		String plainText = "Crypting";
+
+		long cipherText = encrypt(keyString, plainText);
+
+		System.out.println("Key         : " + keyString);
+		System.out.println("Plain Text  : " + plainText);
+		System.out.println("Cipher text : " + Long.toHexString(cipherText));
 	}
 }
