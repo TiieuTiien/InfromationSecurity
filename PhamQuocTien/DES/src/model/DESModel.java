@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Random;
+
 public class DESModel {
 	// PC-1 table for key permutation
     private static final int[] PC1_TABLE = {
@@ -21,10 +23,37 @@ public class DESModel {
         51, 45, 33, 48, 44, 49, 39, 56,
         34, 53, 46, 42, 50, 36, 29, 32
     };
+    
+    // Define the IP table as a global constant variable
+    private static final int[] IPTable = {
+        58, 50, 42, 34, 26, 18, 10, 2,
+        60, 52, 44, 36, 28, 20, 12, 4,
+        62, 54, 46, 38, 30, 22, 14, 6,
+        64, 56, 48, 40, 32, 24, 16, 8,
+        57, 49, 41, 33, 25, 17, 9, 1,
+        59, 51, 43, 35, 27, 19, 11, 3,
+        61, 53, 45, 37, 29, 21, 13, 5,
+        63, 55, 47, 39, 31, 23, 15, 7
+    };
+
+    private static String generateRandomString(int length) {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder sb = new StringBuilder();
+
+        Random random = new Random();
+        for (int i = 0; i < length; i++) {
+            int randomIndex = random.nextInt(characters.length());
+            char randomChar = characters.charAt(randomIndex);
+            sb.append(randomChar);
+        }
+
+        return sb.toString();
+    }
 
 
 	public static void main(String[] args) {
-		String keyString = "MyKey123"; // Example key string
+		
+		String keyString = generateRandomString(8); // Random key string
 
 		// Convert the key string to a 64-bit key
 		long key64Bit = convertKeyTo64Bit(keyString);
@@ -45,6 +74,27 @@ public class DESModel {
 		System.out.println("Permuted 56-bit Key: " + Long.toHexString(permutedKey56Bit));
 		System.out.println("C0: " + Long.toHexString(C0));
 		System.out.println("D0: " + Long.toHexString(D0));
+		
+
+        // Perform round key generation
+        long[] roundKeys = generateRoundKeys(C0, D0);
+
+//        System.out.println("Round Keys:");
+//        for (int i = 0; i < roundKeys.length; i++) {
+//            System.out.println("Round " + (i + 1) + ": " + Long.toHexString(roundKeys[i]));
+//        }
+        
+
+        String input = generateRandomString(8); // Random input string
+        
+        System.out.println("Random String      : " + input);
+        
+        long plaintextBlock = stringToPlaintextBlock(input);
+        
+        long permutedData = initialPermutation(plaintextBlock);
+        
+        System.out.println("Permuted data      : " + Long.toHexString(permutedData));
+        
 	}
 
 	// Convert key string to a 64-bit key
@@ -58,6 +108,7 @@ public class DESModel {
 		return key64Bit;
 	}
 
+	// STEP 1: Key Generation
 	// Helper method to permute the key using a specified permutation table
 	private static long permuteKey64(long key, int[] permutationTable) {
 		long permutedKey = 0;
@@ -70,7 +121,7 @@ public class DESModel {
 	}
 
     // Helper method to perform permutation using a specified permutation table
-    private static long permutation(long value, int[] permutationTable) {
+    private static long permuteKey56(long value, int[] permutationTable) {
         long permutedValue = 0;
         for (int i = 0; i < permutationTable.length; i++) {
             int bitPosition = 56 - permutationTable[i];
@@ -93,6 +144,7 @@ public class DESModel {
 		return keyHalves;
 	}
 
+	// STEP 2: Round Key Generation
     // Helper method for circular left shift
     private static long circularLeftShift(long value, int shifts) {
         return ((value << shifts) | (value >>> (28 - shifts))) & 0xFFFFFFF; // Mask with 28 bits
@@ -112,9 +164,59 @@ public class DESModel {
             long combinedCD = (C0 << 28) | D0;
 
             // Apply PC-2 permutation
-            roundKeys[i] = permutation(combinedCD, PC2_TABLE);
+            roundKeys[i] = permuteKey56(combinedCD, PC2_TABLE);
         }
 
         return roundKeys;
+    }
+    //^
+    // |
+    // |
+    // This is a part of this function
+    // Apply PC-2 key permutation to combine C0 and D0 and generate a 48-bit subkey
+//    private static long permutePC2(long C0, long D0, int[] permutationTable) {
+//        long combinedKey = (C0 << 28) | D0;
+//        long subkey = 0;
+//
+//        for (int i = 0; i < permutationTable.length; i++) {
+//            int bitPosition = permutationTable[i];
+//            long bitMask = 1L << (55 - bitPosition);
+//            long extractedBit = (combinedKey & bitMask) >>> (55 - bitPosition);
+//            subkey |= (extractedBit << (47 - i));
+//        }
+//
+//        return subkey;
+//    }
+
+    // Initial Permutation (IP) function
+    private static long initialPermutation(long input) {
+        long permutedData = 0;
+
+        for (int i = 0; i < IPTable.length; i++) {
+            int bitPosition = IPTable[i] - 1;
+            long bitMask = 1L << (63 - bitPosition);
+            long extractedBit = (input & bitMask) >>> (63 - bitPosition);
+            permutedData |= (extractedBit << (63 - i));
+        }
+
+        return permutedData;
+    }
+    
+    private static long stringToPlaintextBlock(String input) {
+        // Pad the string with spaces if needed
+        while (input.length() < 8) {
+            input += " ";
+        }
+
+        // Take the first 8 characters and convert them to a 64-bit block
+        String substring = input.substring(0, 8);
+        byte[] bytes = substring.getBytes();
+        long plaintextBlock = 0;
+
+        for (int i = 0; i < 8; i++) {
+            plaintextBlock |= ((long) bytes[i] & 0xFF) << (56 - (i * 8));
+        }
+
+        return plaintextBlock;
     }
 }
