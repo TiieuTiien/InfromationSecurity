@@ -313,6 +313,10 @@ public class DESModel {
     	
     	long left, right, nextLeft, nextRight;
     	
+    	// In the code below, leftHalf represents the 32-bit left half of the final output (L16),
+    	// and rightHalf represents the 32-bit right half of the final output (R16).
+    	// By shifting the bits appropriately and performing a bitwise OR operation,
+    	// we combine the left and right halves into a single 64-bit block (R16L16).
     	for(int i = 0; i < 16; i++) {
 	        left = permutedData >>> 32;
 	        right = permutedData & 0xFFFFFFFF;
@@ -324,7 +328,8 @@ public class DESModel {
 	        System.out.println("Initial Permutation (IP) " + i + ": " + Long.toHexString(permutedData));
     	}
 
-        return permutedData;
+    	// Swap the left and right halves by shifting the entire block and combining it again (L16R16).
+        return (permutedData << 32) | (permutedData >>> 32);
     }
 
 	public static void main(String[] args) {
