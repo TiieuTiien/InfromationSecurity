@@ -275,10 +275,10 @@ public class HillView extends JFrame {
 		eSetButt.addActionListener(hillListener);
 		decryptButt.addActionListener(hillListener);
 		dSetButt.addActionListener(hillListener);
-		
+
 		Font font = new Font("Tahoma", Font.PLAIN, 11);
 		Font fontPlain = new Font("Tahoma", Font.PLAIN, 11);
-		
+
 		keyGenLabel.setFont(font);
 		eKeyLabel.setFont(font);
 		ePlainLabel.setFont(font);
@@ -286,7 +286,7 @@ public class HillView extends JFrame {
 		dKeyLabel.setFont(font);
 		dCipherLabel.setFont(font);
 		dPlainLabel.setFont(font);
-		
+
 		keyGenTextField.setFont(fontPlain);
 		eKeyTextField.setFont(fontPlain);
 		ePlainTextField.setFont(fontPlain);
@@ -294,7 +294,7 @@ public class HillView extends JFrame {
 		dKeyTextField.setFont(fontPlain);
 		dCipherTextField.setFont(fontPlain);
 		dPlainTextField.setFont(fontPlain);
-		
+
 		keyGenButt.setFont(font);
 		setEKeyButt.setFont(font);
 		setDKeyButt.setFont(font);
@@ -302,7 +302,7 @@ public class HillView extends JFrame {
 		eSetButt.setFont(font);
 		decryptButt.setFont(font);
 		dSetButt.setFont(font);
-		
+
 		keyGenButt.setFocusPainted(false);
 		setEKeyButt.setFocusPainted(false);
 		setDKeyButt.setFocusPainted(false);
@@ -312,7 +312,7 @@ public class HillView extends JFrame {
 		dSetButt.setFocusPainted(false);
 		this.setLocationRelativeTo(null);
 		contentPane.setBackground(SystemColor.control);
-		
+
 	}
 
 	public JTextField getKeyGenTextField() {
@@ -390,7 +390,6 @@ public class HillView extends JFrame {
 
 		this.hillModel = new HillModel(key, message);
 
-		System.out.println(hillModel.getKey());
 		String cipher = this.hillModel.encrypt();
 
 		return cipher = (cipher.length() > 0) ? cipher : "Type something, please!";
@@ -419,8 +418,6 @@ public class HillView extends JFrame {
 		hillModel.setKey("");
 
 		String key = this.hillModel.keyGen();
-
-		System.out.println(key);
 
 		return key;
 	}

@@ -22,6 +22,8 @@ import javax.swing.SwingConstants;
 import java.awt.FlowLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class AffineView extends JFrame {
 
@@ -46,17 +48,92 @@ public class AffineView extends JFrame {
 
 		AffineListener affineListener = new AffineListener(this);
 
-		setBounds(100, 100, 600, 300);
+		setBounds(100, 100, 600, 350);
 		panel = new JPanel();
 		panel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		panel.setLayout(new BorderLayout(10, 10));
 		setContentPane(panel);
 
 		Border border = BorderFactory.createLineBorder(Color.GRAY);
-		JPanel affPanel = new JPanel();
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[] { 574, 0 };
+		gbl_panel.rowHeights = new int[] { 60, 206, 0 };
+		gbl_panel.columnWeights = new double[] { 0.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
+		panel.setLayout(gbl_panel);
 
-		JLabel affLabel = new JLabel("AFFLINE CIPHER");
-		affLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		JPanel keyPanel = new JPanel();
+		keyPanel.setBorder(border);
+		GridBagLayout gbl_keyPanel = new GridBagLayout();
+		gbl_keyPanel.columnWidths = new int[] { 263, 1, 0 };
+		gbl_keyPanel.rowHeights = new int[] { 30, 23, 0 };
+		gbl_keyPanel.columnWeights = new double[] { 1.0, 0.0, Double.MIN_VALUE };
+		gbl_keyPanel.rowWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
+		keyPanel.setLayout(gbl_keyPanel);
+
+		JPanel panel_3 = new JPanel();
+		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
+		gbc_panel_3.fill = GridBagConstraints.BOTH;
+		gbc_panel_3.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_3.gridx = 0;
+		gbc_panel_3.gridy = 0;
+		keyPanel.add(panel_3, gbc_panel_3);
+
+		JLabel keyGenLabel = new JLabel("Key generater");
+		panel_3.add(keyGenLabel);
+
+		JLabel aLabel = new JLabel("a");
+		panel_3.add(aLabel);
+		aLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+
+		aTextField = new JTextField();
+		panel_3.add(aTextField);
+		aTextField.setHorizontalAlignment(SwingConstants.LEFT);
+		aTextField.setColumns(3);
+
+		JLabel bLabel = new JLabel("b");
+		panel_3.add(bLabel);
+		bLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+
+		bTextField = new JTextField();
+		panel_3.add(bTextField);
+		bTextField.setColumns(3);
+
+		JPanel panel_5 = new JPanel();
+		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
+		gbc_panel_5.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_5.fill = GridBagConstraints.BOTH;
+		gbc_panel_5.gridx = 0;
+		gbc_panel_5.gridy = 1;
+		keyPanel.add(panel_5, gbc_panel_5);
+
+		JButton setEKeyButt = new JButton("Set Encrypt key");
+		setEKeyButt.addActionListener(affineListener);
+		panel_5.add(setEKeyButt);
+
+		JButton keyGenButt = new JButton("Generate");
+		panel_5.add(keyGenButt);
+
+		JButton setDkeyButt = new JButton("Set Decrypt key");
+		setDkeyButt.addActionListener(affineListener);
+		panel_5.add(setDkeyButt);
+
+		keyGenButt.addActionListener(affineListener);
+
+		JPanel abPanel = new JPanel();
+		GridBagConstraints gbc_abPanel = new GridBagConstraints();
+		gbc_abPanel.anchor = GridBagConstraints.WEST;
+		gbc_abPanel.gridx = 1;
+		gbc_abPanel.gridy = 1;
+		keyPanel.add(abPanel, gbc_abPanel);
+		abPanel.setLayout(new GridLayout(2, 1, 0, 0));
+		GridBagConstraints gbc_keyPanel = new GridBagConstraints();
+		gbc_keyPanel.anchor = GridBagConstraints.NORTH;
+		gbc_keyPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_keyPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_keyPanel.gridx = 0;
+		gbc_keyPanel.gridy = 0;
+		panel.add(keyPanel, gbc_keyPanel);
+		panel.setPreferredSize(new Dimension(300, 400));
 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayout(1, 2, 10, 10));
@@ -75,7 +152,7 @@ public class AffineView extends JFrame {
 		gbl_encryptPanel.columnWidths = new int[] { 305, 5 };
 		gbl_encryptPanel.rowHeights = new int[] { 20, 0, 123, 0, 5 };
 		gbl_encryptPanel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_encryptPanel.rowWeights = new double[] { 0.0, 1.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_encryptPanel.rowWeights = new double[] { 0.0, 1.0, 1.0, 1.0, Double.MIN_VALUE };
 		encryptPanel.setLayout(gbl_encryptPanel);
 		encryptPanel.setBorder(border);
 
@@ -102,7 +179,7 @@ public class AffineView extends JFrame {
 		eKeyATextField = new JTextField();
 		eKeyPanel.add(eKeyATextField);
 		eKeyATextField.setHorizontalAlignment(SwingConstants.LEFT);
-		eKeyATextField.setColumns(5);
+		eKeyATextField.setColumns(3);
 
 		JLabel eKeyBLabel = new JLabel("b");
 		eKeyPanel.add(eKeyBLabel);
@@ -110,7 +187,7 @@ public class AffineView extends JFrame {
 
 		eKeyBTextField = new JTextField();
 		eKeyPanel.add(eKeyBTextField);
-		eKeyBTextField.setColumns(5);
+		eKeyBTextField.setColumns(3);
 
 		JPanel eTextPanel = new JPanel();
 		GridBagConstraints gbc_eTextPanel = new GridBagConstraints();
@@ -130,7 +207,7 @@ public class AffineView extends JFrame {
 		eTextPanel.add(ePlainPanel);
 		ePlainPanel.setLayout(new GridLayout(0, 1, 0, 0));
 
-		ePlainTextField = new JTextField();
+		ePlainTextField = new JTextField("ABCDefgh");
 		ePlainPanel.add(ePlainTextField);
 		ePlainTextField.setColumns(10);
 
@@ -147,11 +224,20 @@ public class AffineView extends JFrame {
 		eCipherPanel.add(eCipherTextField);
 		eCipherTextField.setColumns(10);
 
+		JPanel panel_1 = new JPanel();
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.gridx = 0;
+		gbc_panel_1.gridy = 3;
+		encryptPanel.add(panel_1, gbc_panel_1);
+
 		JButton eButt = new JButton("Encrypt");
-		GridBagConstraints gbc_eButt = new GridBagConstraints();
-		gbc_eButt.gridx = 0;
-		gbc_eButt.gridy = 3;
-		encryptPanel.add(eButt, gbc_eButt);
+		panel_1.add(eButt);
+
+		JButton setDCipherButt = new JButton("Set Cipher Text");
+		setDCipherButt.addActionListener(affineListener);
+		panel_1.add(setDCipherButt);
+		eButt.addActionListener(affineListener);
 
 		JPanel decryptPanel = new JPanel();
 		cipherPanel.add(decryptPanel);
@@ -159,7 +245,7 @@ public class AffineView extends JFrame {
 		gbl_decryptPanel.columnWidths = new int[] { 305, 5 };
 		gbl_decryptPanel.rowHeights = new int[] { 20, 0, 123, 0, 5 };
 		gbl_decryptPanel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_decryptPanel.rowWeights = new double[] { 0.0, 1.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_decryptPanel.rowWeights = new double[] { 0.0, 1.0, 1.0, 1.0, Double.MIN_VALUE };
 		decryptPanel.setLayout(gbl_decryptPanel);
 		decryptPanel.setBorder(border);
 
@@ -186,7 +272,7 @@ public class AffineView extends JFrame {
 		dKeyATextField = new JTextField();
 		dKeyPanel.add(dKeyATextField);
 		dKeyATextField.setHorizontalAlignment(SwingConstants.LEFT);
-		dKeyATextField.setColumns(5);
+		dKeyATextField.setColumns(3);
 
 		JLabel dKeyBLabel = new JLabel("b");
 		dKeyPanel.add(dKeyBLabel);
@@ -194,7 +280,7 @@ public class AffineView extends JFrame {
 
 		dKeyBTextField = new JTextField();
 		dKeyPanel.add(dKeyBTextField);
-		dKeyBTextField.setColumns(5);
+		dKeyBTextField.setColumns(3);
 
 		JPanel dTextPanel = new JPanel();
 		GridBagConstraints gbc_dTextPanel = new GridBagConstraints();
@@ -231,66 +317,25 @@ public class AffineView extends JFrame {
 		dPlainPanel.add(dPlainTextField);
 		dPlainTextField.setColumns(10);
 
+		JPanel panel_2 = new JPanel();
+		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
+		gbc_panel_2.fill = GridBagConstraints.BOTH;
+		gbc_panel_2.gridx = 0;
+		gbc_panel_2.gridy = 3;
+		decryptPanel.add(panel_2, gbc_panel_2);
+
 		JButton dButt = new JButton("Decrypt");
-		GridBagConstraints gbc_dButt = new GridBagConstraints();
-		gbc_dButt.gridx = 0;
-		gbc_dButt.gridy = 3;
-		decryptPanel.add(dButt, gbc_dButt);
-
-		JPanel keyPanel = new JPanel();
-		keyPanel.setBorder(border);
-		keyPanel.setLayout(new BorderLayout(0, 0));
-
-		JPanel keyGenPanel = new JPanel();
-		keyPanel.add(keyGenPanel, BorderLayout.NORTH);
-
-		JLabel keyGenLabel = new JLabel("Key gen");
-		keyGenPanel.add(keyGenLabel);
-
-		JPanel abPanel = new JPanel();
-		keyPanel.add(abPanel, BorderLayout.CENTER);
-		abPanel.setLayout(new GridLayout(2, 1, 0, 0));
-
-		JPanel aPanel = new JPanel();
-		abPanel.add(aPanel);
-
-		JLabel aLabel = new JLabel("a");
-		aLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		aPanel.add(aLabel);
-
-		aTextField = new JTextField();
-		aTextField.setHorizontalAlignment(SwingConstants.LEFT);
-		aTextField.setColumns(5);
-		aPanel.add(aTextField);
-
-		JPanel bPanel = new JPanel();
-		abPanel.add(bPanel);
-
-		JLabel bLabel = new JLabel("b");
-		bLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		bPanel.add(bLabel);
-
-		bTextField = new JTextField();
-		bTextField.setColumns(5);
-		bPanel.add(bTextField);
-
-		JPanel keyGenButtPanel = new JPanel();
-		keyPanel.add(keyGenButtPanel, BorderLayout.SOUTH);
-
-		JButton keyGenButt = new JButton("Generate");
-		keyGenButtPanel.add(keyGenButt);
-
-		keyGenButt.addActionListener(affineListener);
-		eButt.addActionListener(affineListener);
+		panel_2.add(dButt);
 		dButt.addActionListener(affineListener);
 
-		affPanel.setBorder(border);
-		affPanel.add(affLabel);
-
-		panel.add(affPanel, BorderLayout.NORTH);
-		panel.add(mainPanel, BorderLayout.CENTER);
-		panel.setPreferredSize(new Dimension(300, 400));
-		panel.add(keyPanel, BorderLayout.WEST);
+		JButton setEPlainButt = new JButton("Set Plain Text");
+		setEPlainButt.addActionListener(affineListener);
+		panel_2.add(setEPlainButt);
+		GridBagConstraints gbc_mainPanel = new GridBagConstraints();
+		gbc_mainPanel.fill = GridBagConstraints.BOTH;
+		gbc_mainPanel.gridx = 0;
+		gbc_mainPanel.gridy = 1;
+		panel.add(mainPanel, gbc_mainPanel);
 
 		this.setTitle("Affline Cipher");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -315,7 +360,7 @@ public class AffineView extends JFrame {
 	}
 
 	public JTextField getdPlainTextField() {
-		return dCipherTextField;
+		return dPlainTextField;
 	}
 
 	public void setdPlainTextField(String str) {
@@ -360,8 +405,9 @@ public class AffineView extends JFrame {
 		return ePlainTextField;
 	}
 
-	public void setePlainTextField(JTextField ePlainTextField) {
-		this.ePlainTextField = ePlainTextField;
+	public void setePlainTextField(String str) {
+		this.ePlainTextField.setText(str);
+		;
 	}
 
 	public JTextField geteKeyATextField() {
@@ -387,7 +433,8 @@ public class AffineView extends JFrame {
 	}
 
 	public void setdKeyATextField(String str) {
-		this.dKeyATextField.setText(str);;
+		this.dKeyATextField.setText(str);
+		;
 	}
 
 	public JTextField getdKeyBTextField() {
@@ -395,7 +442,8 @@ public class AffineView extends JFrame {
 	}
 
 	public void setdKeyBTextField(String str) {
-		this.dKeyBTextField.setText(str);;
+		this.dKeyBTextField.setText(str);
+		;
 	}
 
 	public int genarateA() {
@@ -410,9 +458,7 @@ public class AffineView extends JFrame {
 		this.afflineModel.setA(Integer.valueOf(this.geteKeyATextField().getText().toString()));
 		this.afflineModel.setB(Integer.valueOf(this.geteKeyBTextField().getText().toString()));
 		String plain = this.getePlainTextField().getText().toString();
-		String cipher = (plain.length() > 0)
-				? this.afflineModel.encryptMessage(plain.toCharArray())
-				: "";
+		String cipher = (plain.length() > 0) ? this.afflineModel.encryptMessage(plain.toCharArray()) : "";
 		return cipher;
 	}
 
@@ -420,9 +466,7 @@ public class AffineView extends JFrame {
 		this.afflineModel.setA(Integer.valueOf(this.getdKeyATextField().getText().toString()));
 		this.afflineModel.setB(Integer.valueOf(this.getdKeyBTextField().getText().toString()));
 		String cipher = this.getdCipherTextField().getText().toString();
-		String plain = (cipher.length() > 0)
-				? this.afflineModel.decryptCipher(cipher)
-				: "";
+		String plain = (cipher.length() > 0) ? this.afflineModel.decrypt(cipher) : "";
 		return plain;
 	}
 }

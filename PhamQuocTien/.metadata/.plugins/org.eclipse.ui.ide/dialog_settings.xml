@@ -6,8 +6,8 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
-			<item value="D:\Download\Hoc_code\Java\InfromationSecurity"/>
-			<item value="D:\Download\Hoc_code\Java\InfromationSecurity\PhamQuocTien\Hill"/>
+			<item value="T:\PhamQuocTien\Code\InfromationSecurity\PhamQuocTien\RSA"/>
+			<item value="T:\PhamQuocTien\Code\InfromationSecurity\PhamQuocTien\DES"/>
 		</list>
 	</section>
 </section>

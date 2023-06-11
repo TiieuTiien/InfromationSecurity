@@ -68,46 +68,57 @@ public class AffineModel {
 		return (int) (Math.random() * 26);
 	}
 
+	private int modularInverse(int a, int m) {
+	    for (int x = 1; x < m; x++) {
+	        if ((a * x) % m == 1) {
+	            return x;
+	        }
+	    }
+	    return -1;
+	}
+
 	public String encryptMessage(char[] msg) {
 		String cipher = "";
 		for (int i = 0; i < msg.length; i++) {
-			msg[i] = Character.toUpperCase(msg[i]);
-		}
-		for (int i = 0; i < msg.length; i++) {
 			if (msg[i] != ' ') {
-				cipher = cipher + (char) ((((this.a * (msg[i] - 'A')) + this.b) % 26) + 'A');
+				if(Character.isUpperCase(msg[i]))
+					cipher = cipher + (char) ((((this.a * (msg[i] - 'A')) + this.b) % 26) + 'A');
+				else
+					cipher = cipher + (char) ((((this.a * (msg[i] - 'a')) + this.b) % 26) + 'a');					
 			} else {
 				cipher += msg[i];
 			}
 		}
 		return cipher;
 	}
+	
+	public String decrypt(String ciphertext) {
+        StringBuilder decryptedText = new StringBuilder();
+        int m = 26; // Number of letters in the alphabet
 
-	public String decryptCipher(String cipher) {
-		String msg = "";
-		int a_inv = 0;
-		int flag = 0;
+        // Modular multiplicative inverse of 'a' modulo 26
+        int aInverse = modularInverse(a, m);
 
-		// Find a^-1 (the multiplicative inverse of a in the group of integers modulo m)
-		for (int i = 0; i < 26; i++) {
-			flag = (a * i) % 26;
+        if (aInverse == -1) {
+            throw new IllegalArgumentException("'a' must be coprime with 26.");
+        }
 
-			if (flag == 1) {
-				a_inv = i;
-				break;
-			}
-		}
-		
-		cipher.toUpperCase();
-		
-		for (int i = 0; i < cipher.length(); i++) {
-			if (cipher.charAt(i) != ' ') {
-				msg = msg + (char) (((a_inv * ((cipher.charAt(i) + 'A' - this.b)) % 26)) + 'A');
-			} else {
-				msg += cipher.charAt(i);
-			}
-		}
+        for (char c : ciphertext.toCharArray()) {
+            if (Character.isLetter(c)) {
+                if (Character.isUpperCase(c)) {
+                    int letterValue = c - 'A';
+                    int p = (aInverse * (letterValue - b + m)) % m;
+                    decryptedText.append((char) (p + 'A'));
+                } else if (Character.isLowerCase(c)) {
+                    int letterValue = c - 'a';
+                    int p = (aInverse * (letterValue - b + m)) % m;
+                    decryptedText.append((char) (p + 'a'));
+                }
+            } else {
+                decryptedText.append(c);
+            }
+        }
 
-		return msg;
-	}
+        return decryptedText.toString();
+    }
 }
