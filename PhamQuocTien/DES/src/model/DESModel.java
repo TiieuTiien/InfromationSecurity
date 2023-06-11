@@ -127,19 +127,19 @@ public class DESModel {
         }
     };
 
-    private static String generateRandomString(int length) {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder sb = new StringBuilder();
-
-        Random random = new Random();
-        for (int i = 0; i < length; i++) {
-            int randomIndex = random.nextInt(characters.length());
-            char randomChar = characters.charAt(randomIndex);
-            sb.append(randomChar);
-        }
-
-        return sb.toString();
-    }
+//    private static String generateRandomString(int length) {
+//        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+//        StringBuilder sb = new StringBuilder();
+//
+//        Random random = new Random();
+//        for (int i = 0; i < length; i++) {
+//            int randomIndex = random.nextInt(characters.length());
+//            char randomChar = characters.charAt(randomIndex);
+//            sb.append(randomChar);
+//        }
+//
+//        return sb.toString();
+//    }
 
 	// Convert key string to a 64-bit key
 	private static long convertKeyTo64Bit(String keyString) {
@@ -280,8 +280,18 @@ public class DESModel {
 	 private static long substitute(long input) {
 	     long substituted = 0;
 	     for (int i = 0; i < 8; i++) {
+	    	 
+	    	 /*The row index calculation extracts two bits from the input to determine the row position within the S-box.
+	    	  * It involves the following steps:
+	    	  * (input & (1L << (42 - 6 * i))) isolates the 6th bit of the current 6-bit block. >>> (42 - 6 * i + 4) shifts the 6th bit to the rightmost position, aligning it with the lower 2 bits of the row index.
+	    	  * (input & (1L << (47 - 6 * i))) isolates the 1st bit of the current 6-bit block. >>> (47 - 6 * i + 1) shifts the 1st bit to the rightmost position, aligning it with the uppermost bit of the row index.
+	    	  * The | operator combines the shifted bits to form the row index.*/
+	    	 
 	         int row = (int) ((input & (1L << (42 - 6 * i))) >>> (42 - 6 * i + 4) | (input & (1L << (47 - 6 * i))) >>> (47 - 6 * i + 1));
 	         int col = (int) ((input & (1L << (41 - 6 * i))) >>> (41 - 6 * i + 1) | (input & (1L << (40 - 6 * i))) >>> (40 - 6 * i));
+	         
+	         System.out.println("Row: " + row * 16 + "Col: " + col);
+	         
 	         int sBoxValue = S_BOXES[i][row * 16 + col];
 	         substituted |= (long) sBoxValue << (32 - 4 * i);
 	     }
@@ -311,7 +321,7 @@ public class DESModel {
     // Complete Feistel structure
     public static long feistel(long permutedData, long roundKeys[]) {
     	
-    	long left, right, nextLeft, nextRight;
+    	long left, right;
     	
     	// In the code below, leftHalf represents the 32-bit left half of the final output (L16),
     	// and rightHalf represents the 32-bit right half of the final output (R16).
@@ -321,12 +331,14 @@ public class DESModel {
 	        left = permutedData >>> 32;
 	        right = permutedData & 0xFFFFFFFF;
 	
-	        nextLeft = right;
-	        nextRight = left ^ feistelRound(right, roundKeys[i]);
+	        long newRight = left ^ feistelRound(right, roundKeys[i]);
+	        left = right;
 	        
-	        permutedData = (nextLeft << 32) | nextRight;
+	        permutedData = (left << 32) | newRight;
 	        System.out.println("Initial Permutation (IP) " + i + ": " + Long.toHexString(permutedData));
     	}
+
+        System.out.println("Initial Permutation (IP) 16: " + Long.toHexString(permutedData));
 
     	// Swap the left and right halves by shifting the entire block and combining it again (L16R16).
         return (permutedData << 32) | (permutedData >>> 32);
@@ -354,17 +366,10 @@ public class DESModel {
 
 		System.out.println("Permuted 56-bit Key: " + Long.toHexString(permutedKey56Bit));
 		System.out.println("C0: " + Long.toHexString(C0));
-		System.out.println("D0: " + Long.toHexString(D0));
-		
+		System.out.println("D0: " + Long.toHexString(D0));		
 
         // Perform round key generation
-        long[] roundKeys = generateRoundKeys(C0, D0);
-
-//        System.out.println("Round Keys:");
-//        for (int i = 0; i < roundKeys.length; i++) {
-//            System.out.println("Round " + (i + 1) + ": " + Long.toHexString(roundKeys[i]));
-//        }
-        
+        long[] roundKeys = generateRoundKeys(C0, D0);        
 
         String message = "Crypting"; // Random input string
         
@@ -377,7 +382,7 @@ public class DESModel {
         System.out.println("Permuted data      : " + Long.toHexString(permutedData));
         
         long output = feistel(permutedData, roundKeys);
-        System.out.println("Initial Permutation (IP) 16: " + Long.toHexString(output));
+        System.out.println("Initial Permutation (IP) After swap: " + Long.toHexString(output));
         
 	}
 }
