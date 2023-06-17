@@ -69,56 +69,70 @@ public class AffineModel {
 	}
 
 	private int modularInverse(int a, int m) {
-	    for (int x = 1; x < m; x++) {
-	        if ((a * x) % m == 1) {
-	            return x;
-	        }
-	    }
-	    return -1;
+		for (int x = 1; x < m; x++) {
+			if ((a * x) % m == 1) {
+				return x;
+			}
+		}
+		return -1;
 	}
 
 	public String encryptMessage(char[] msg) {
 		String cipher = "";
 		for (int i = 0; i < msg.length; i++) {
 			if (msg[i] != ' ') {
-				if(Character.isUpperCase(msg[i]))
+				if (Character.isUpperCase(msg[i]))
 					cipher = cipher + (char) ((((this.a * (msg[i] - 'A')) + this.b) % 26) + 'A');
 				else
-					cipher = cipher + (char) ((((this.a * (msg[i] - 'a')) + this.b) % 26) + 'a');					
+					cipher = cipher + (char) ((((this.a * (msg[i] - 'a')) + this.b) % 26) + 'a');
 			} else {
 				cipher += msg[i];
 			}
 		}
 		return cipher;
 	}
-	
+
 	public String decrypt(String ciphertext) {
-        StringBuilder decryptedText = new StringBuilder();
-        int m = 26; // Number of letters in the alphabet
+		StringBuilder decryptedText = new StringBuilder();
+		int m = 26; // Number of letters in the alphabet
 
-        // Modular multiplicative inverse of 'a' modulo 26
-        int aInverse = modularInverse(a, m);
+		// Modular multiplicative inverse of 'a' modulo 26
+		int aInverse = modularInverse(a, m);
 
-        if (aInverse == -1) {
-            throw new IllegalArgumentException("'a' must be coprime with 26.");
-        }
+		if (aInverse == -1) {
+			throw new IllegalArgumentException("'a' must be coprime with 26.");
+		}
 
-        for (char c : ciphertext.toCharArray()) {
-            if (Character.isLetter(c)) {
-                if (Character.isUpperCase(c)) {
-                    int letterValue = c - 'A';
-                    int p = (aInverse * (letterValue - b + m)) % m;
-                    decryptedText.append((char) (p + 'A'));
-                } else if (Character.isLowerCase(c)) {
-                    int letterValue = c - 'a';
-                    int p = (aInverse * (letterValue - b + m)) % m;
-                    decryptedText.append((char) (p + 'a'));
-                }
-            } else {
-                decryptedText.append(c);
-            }
-        }
+		for (char c : ciphertext.toCharArray()) {
+			if (Character.isLetter(c)) {
+				if (Character.isUpperCase(c)) {
+					int letterValue = c - 'A';
+					int p = (aInverse * (letterValue - b + m)) % m;
+					decryptedText.append((char) (p + 'A'));
+				} else if (Character.isLowerCase(c)) {
+					int letterValue = c - 'a';
+					int p = (aInverse * (letterValue - b + m)) % m;
+					decryptedText.append((char) (p + 'a'));
+				}
+			} else{
+				decryptedText.append(c);
+			}
+		}
 
-        return decryptedText.toString();
-    }
+		return decryptedText.toString();
+	}
+
+	public static void main(String[] args) {
+		AffineModel affineModel = new AffineModel();
+
+		String message = "Hello World!";
+		char[] messageChar = message.toCharArray();
+
+		String cipherText = affineModel.encryptMessage(messageChar);
+
+		String plainText = affineModel.decrypt(cipherText);
+
+		System.out.println("Cipher :" + cipherText);
+		System.out.println("Plain  :" + plainText);
+	}
 }
