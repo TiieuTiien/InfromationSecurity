@@ -4,8 +4,8 @@
     <link rel="stylesheet" href="style/style.css" />
   </head>
   <body>
-    <h1>Hybrid encryption</h1>
     <div class="cryptoArea">
+      <h1>Hybrid encryption</h1>
       <div class="container">
         <div class="plaintext">
           <h2>Plain text</h2>
@@ -13,7 +13,7 @@
             name="plaintextArea"
             id="plaintextArea"
             cols="30"
-            rows="10"
+            rows="25"
             placeholder="Type something or open a file"
           ></textarea>
         </div>
@@ -29,33 +29,44 @@
             ></textarea>
           </div>
           <div class="keyArea">
-            <h2>Plain text</h2>
-            <textarea
-              name="plaintextArea"
-              id="plaintextArea"
-              cols="30"
-              rows="10"
-              placeholder="Type something or open a file"
-            ></textarea>
-          </div>
-          <div class="keyArea">
-            <h2>Cipher text</h2>
-            <textarea
-              name="plaintextArea"
-              id="plaintextArea"
-              cols="30"
-              rows="10"
-              placeholder="Type something or open a file"
-            ></textarea>
-          </div>
-          <div class="button">
-            <button>Encrypt</button>
-            <button>Decrypt</button>
-            <button>Open file</button>
-            <button>Read file</button>
+            <div class="encryptedKey">
+              <h2>Encrypted AES Key</h2>
+              <textarea
+                name="plaintextArea"
+                id="plaintextArea"
+                cols="30"
+                rows="10"
+                placeholder="Type something or open a file"
+              ></textarea>
+            </div>
+            <div class="privateKey">
+              <h2>Private Key</h2>
+              <textarea
+                name="plaintextArea"
+                id="plaintextArea"
+                cols="30"
+                rows="10"
+                placeholder="Type something or open a file"
+              ></textarea>
+            </div>
           </div>
         </div>
-        <div class="ciphertext"></div>
+        <div class="ciphertext">
+          <h2>Cipher text</h2>
+          <textarea
+            name="cipertextArea"
+            id="ciphertextArea"
+            cols="30"
+            rows="25  "
+            placeholder="Type something or open a file"
+          ></textarea>
+        </div>
+      </div>
+      <div class="buttonArea">
+        <button>Encrypt</button>
+        <button>Decrypt</button>
+        <button>Open file</button>
+        <button>Read file</button>
       </div>
     </div>
     <script src="AES.js"></script>
