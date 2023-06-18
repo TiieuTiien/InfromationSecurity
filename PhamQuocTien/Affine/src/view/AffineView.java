@@ -337,6 +337,12 @@ public class AffineView extends JFrame {
 		gbc_mainPanel.gridy = 1;
 		panel.add(mainPanel, gbc_mainPanel);
 
+		setEKeyButt.setFocusPainted(false);
+		setEPlainButt.setFocusPainted(false);
+		setDkeyButt.setFocusPainted(false);
+		setDCipherButt.setFocusPainted(false);
+		keyGenButt.setFocusPainted(false);
+		
 		this.setTitle("Affline Cipher");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
