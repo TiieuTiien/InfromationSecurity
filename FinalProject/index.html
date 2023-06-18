@@ -1,26 +1,40 @@
 <!DOCTYPE html>
-<html lang="en" style="background: #242424;">
+<html lang="en" style="background: #242424">
+  <head>
+    <h1>Hybrid encryption</h1>
+  </head>
+  <body>
+    <div class="cryptoArea">
+      <div class="container">
+        <div class="plaintext">
+          <h2>Hi</h2>
+        </div>
+        <div class="AESkey">
 
-<body>
-  <script src="AES.js"></script>
-  <script>
-    // Example usage
-    const plaintext = 'Hello, World!';
-    const key = generateKey();
+        </div>
+        <div class="ciphertext">
 
-    encrypt(plaintext, key)
-      .then((result) => {
-        console.log('Ciphertext:', result.encryptedData);
-        console.log('IV:', result.iv);
-        return decrypt(result.encryptedData, key, result.iv);
-      })
-      .then((decryptedText) => {
-        console.log('Decrypted Text:', decryptedText);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  </script>
-</body>
+        </div>
+      </div>
+    </div>
+    <script src="AES.js"></script>
+    <script>
+      // Example usage
+      const plaintext = "Hello, World!";
+      const key = generateKey();
 
+      encrypt(plaintext, key)
+        .then((result) => {
+          console.log("Ciphertext:", result.encryptedData);
+          console.log("IV:", result.iv);
+          return decrypt(result.encryptedData, key, result.iv);
+        })
+        .then((decryptedText) => {
+          console.log("Decrypted Text:", decryptedText);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    </script>
+  </body>
 </html>
