@@ -1,20 +1,61 @@
 <!DOCTYPE html>
 <html lang="en" style="background: #242424">
   <head>
-    <h1>Hybrid encryption</h1>
+    <link rel="stylesheet" href="style/style.css" />
   </head>
   <body>
+    <h1>Hybrid encryption</h1>
     <div class="cryptoArea">
       <div class="container">
         <div class="plaintext">
-          <h2>Hi</h2>
+          <h2>Plain text</h2>
+          <textarea
+            name="plaintextArea"
+            id="plaintextArea"
+            cols="30"
+            rows="10"
+            placeholder="Type something or open a file"
+          ></textarea>
         </div>
-        <div class="AESkey">
-
+        <div class="crypto">
+          <div class="aesKey">
+            <h2>AES key</h2>
+            <textarea
+              name="plaintextArea"
+              id="plaintextArea"
+              cols="65"
+              rows="3"
+              placeholder="Type something or open a file"
+            ></textarea>
+          </div>
+          <div class="keyArea">
+            <h2>Plain text</h2>
+            <textarea
+              name="plaintextArea"
+              id="plaintextArea"
+              cols="30"
+              rows="10"
+              placeholder="Type something or open a file"
+            ></textarea>
+          </div>
+          <div class="keyArea">
+            <h2>Cipher text</h2>
+            <textarea
+              name="plaintextArea"
+              id="plaintextArea"
+              cols="30"
+              rows="10"
+              placeholder="Type something or open a file"
+            ></textarea>
+          </div>
+          <div class="button">
+            <button>Encrypt</button>
+            <button>Decrypt</button>
+            <button>Open file</button>
+            <button>Read file</button>
+          </div>
         </div>
-        <div class="ciphertext">
-
-        </div>
+        <div class="ciphertext"></div>
       </div>
     </div>
     <script src="AES.js"></script>
