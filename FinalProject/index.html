@@ -21,9 +21,7 @@
             cols="30"
             rows="20"
             placeholder="Type something or open a file"
-          >
-Hello, World!</textarea
-          >
+          ></textarea>
           <input type="file" id="fileInput" />
           <div id="downloadContainer">
             <p>Download as</p>
@@ -41,19 +39,29 @@ Hello, World!</textarea
               name="aesKeyArea"
               id="aesKeyArea"
               cols="65"
-              rows="3"
+              rows="2"
               placeholder="AES key"
             ></textarea>
           </div>
+          <div class="encryptedKey">
+            <h2>Encrypted AES Key</h2>
+            <textarea
+              name="encryptedKeyArea"
+              id="encryptedKeyArea"
+              cols="65"
+              rows="10"
+              placeholder="Encrypted AES Key"
+            ></textarea>
+          </div>
           <div class="keyArea">
-            <div class="encryptedKey">
-              <h2>Encrypted AES Key</h2>
+            <div class="publicKey">
+              <h2>Public Key</h2>
               <textarea
-                name="encryptedKeyArea"
-                id="encryptedKeyArea"
+                name="publicKeyArea"
+                id="publicKeyArea"
                 cols="30"
-                rows="10"
-                placeholder="Encrypted AES Key"
+                rows="2"
+                placeholder="Public Key"
               ></textarea>
               <button class="encryptButt" id="encryptButt" type="button">
                 Encrypt
@@ -65,7 +73,7 @@ Hello, World!</textarea
                 name="privateKeyArea"
                 id="privateKeyArea"
                 cols="30"
-                rows="10"
+                rows="2"
                 placeholder="Private Key"
               ></textarea>
               <button class="decryptButt" id="decryptButt" type="button">
@@ -95,6 +103,7 @@ Hello, World!</textarea
       </div>
     </div>
     <script src="./open.js"></script>
+    <script src="./download.js"></script>
     <script type="module" src="./app.js"></script>
   </body>
 </html>

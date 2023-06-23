@@ -16,10 +16,10 @@ var { publicKey, privateKey } = generateKeys();
 
 var encryptedKeyArea = document.getElementById("encryptedKeyArea");
 var privateKeyArea = document.getElementById("privateKeyArea");
-
+var publicKeyArea = document.getElementById("publicKeyArea");
 // Encrypt
 const encryptButt = document.getElementById("encryptButt")
-encryptButt.addEventListener("click", function () {
+function encryptButtonClickHandler() {
 
     key = generateKey();
 
@@ -32,10 +32,12 @@ encryptButt.addEventListener("click", function () {
     ciphertextArea.value = ciphertext;
 
     encryptedKeyArea.value = encrypt(aesKeyArea.value, publicKey);
+    publicKeyArea.value = removePrivateKeyHeader(publicKey);
     privateKey = removePrivateKeyHeader(privateKey);
     privateKeyArea.value = privateKey;
 
-});
+}
+encryptButt.addEventListener("click", encryptButtonClickHandler);
 
 // Decrypt
 var message = "";
@@ -49,19 +51,28 @@ decryptButt.addEventListener("click", function () {
     aesKeyArea.value = aesKey;
 
     if (aesKey == false) {
-        plaintextArea.value = "error";
         plaintextArea.style.color = "#fc0c00";
-        
-        aesKeyArea.value = "Invalid private key";
         aesKeyArea.style.color = "#fc0c00";
+        plaintextArea.value = "Invalid private key";
+        aesKeyArea.value = "Invalid private key";
+    } else {
+        // Apply the renew effect for successful decryption
+        applyRenewEffect();
+        setTimeout(function () {
+            plaintextArea.style.color = "white"; // Show the new content
+            plaintextArea.value = decryptAES(ciphertext, aesKey);
+
+            aesKeyArea.style.color = "white"; // Show the new content
+            aesKeyArea.value = aesKey;
+        }, 100); // Adjust the delay time (in milliseconds) as desired
     }
-    else {
-
-        plaintextArea.style.color = "white";
-        aesKeyArea.style.color = "white";
-
-        message = decryptAES(ciphertext, aesKey);
-        plaintextArea.value = message;
-    }
-
 });
+
+function applyRenewEffect() {
+    plaintextArea.style.color = "transparent"; // Make the textarea content transparent
+    plaintextArea.placeholder = ""; // Remove the placeholder
+
+    aesKeyArea.style.color = "transparent"; // Make the aesKeyArea content transparent
+    aesKeyArea.placeholder = ""; // Remove the placeholder
+}
+
