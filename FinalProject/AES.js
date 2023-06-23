@@ -1,33 +1,26 @@
-// AES.js
-
-// Import the required module
-const CryptoJS = require('crypto-js');
-
 // Function to generate a random encryption key
 function generateKey() {
   return CryptoJS.lib.WordArray.random(32); // 32 bytes = 256 bits key size
 }
 
-// Function to encrypt plaintext using AES cipher
 function encryptAES(plaintext, key) {
-  const encrypted = CryptoJS.AES.encrypt(plaintext, key);
-  return encrypted.toString();
+  var iv = CryptoJS.lib.WordArray.random(16);
+  const encrypted = CryptoJS.AES.encrypt(plaintext, key, { iv: iv });
+
+  // Concatenate IV and ciphertext
+  const encryptedData = iv.toString() + encrypted.toString();
+  return encryptedData;
 }
 
-// Function to decrypt ciphertext using AES cipher
-function decryptAES(ciphertext, key) {
-  const decrypted = CryptoJS.AES.decrypt(ciphertext, key);
+function decryptAES(encryptedData, key) {
+  // Extract IV from the encrypted data
+  const iv = CryptoJS.enc.Hex.parse(encryptedData.substring(0, 32));
+
+  // Extract ciphertext from the encrypted data
+  const ciphertext = encryptedData.substring(32);
+
+  const decrypted = CryptoJS.AES.decrypt(ciphertext, key, { iv: iv });
   return decrypted.toString(CryptoJS.enc.Utf8);
 }
 
-// Usage example
-const plaintext = 'Hello, World!';
-const key = generateKey();
-
-console.log('Plaintext:', plaintext);
-
-const ciphertext = encryptAES(plaintext, key);
-console.log('Ciphertext:', ciphertext);
-
-const decryptedText = decryptAES(ciphertext, key);
-console.log('Decrypted Text:', decryptedText);
+export { generateKey, encryptAES, decryptAES };

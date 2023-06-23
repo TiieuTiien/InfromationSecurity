@@ -1,66 +1,100 @@
 <!DOCTYPE html>
-<html lang="en" style="background: #242424">
+<html lang="en" style="background: #202124">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hybrid encryption</title>
+    <link rel="stylesheet" href="style/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.1.0/jsencrypt.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+  </head>
 
-<head>
-  <link rel="stylesheet" href="style/style.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-  <script src="./AES.js"></script>
-</head>
-
-<body>
-  <div class="cryptoArea">
-    <h1>Hybrid encryption</h1>
-    <div class="container">
-      <div class="plaintext">
-        <h2>Plain text</h2>
-        <textarea name="plaintextArea" id="plaintextArea" cols="30" rows="25"
-          placeholder="Type something or open a file"></textarea>
-      </div>
-      <div class="crypto">
-        <div class="aesKey">
-          <h2>AES key</h2>
-          <textarea name="plaintextArea" id="plaintextArea" cols="65" rows="3"
-            placeholder="Type something or open a file"></textarea>
-        </div>
-        <div class="keyArea">
-          <div class="encryptedKey">
-            <h2>Encrypted AES Key</h2>
-            <textarea name="plaintextArea" id="plaintextArea" cols="30" rows="10"
-              placeholder="Type something or open a file"></textarea>
-          </div>
-          <div class="privateKey">
-            <h2>Private Key</h2>
-            <textarea name="plaintextArea" id="plaintextArea" cols="30" rows="10"
-              placeholder="Type something or open a file"></textarea>
+  <body>
+    <div class="cryptoArea">
+      <h1>Hybrid encryption</h1>
+      <div class="container">
+        <div class="plaintext">
+          <h2>Plain text</h2>
+          <textarea
+            name="plaintextArea"
+            id="plaintextArea"
+            cols="30"
+            rows="20"
+            placeholder="Type something or open a file"
+          >
+Hello, World!</textarea
+          >
+          <input type="file" id="fileInput" />
+          <div id="downloadContainer">
+            <p>Download as</p>
+            <div class="button-row">
+              <button id="etxtButton">txt</button>
+              <button id="exmlButton">xml</button>
+              <button id="edocxButton">docx</button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="ciphertext">
-        <h2>Cipher text</h2>
-        <textarea name="cipertextArea" id="ciphertextArea" cols="30" rows="25  "
-          placeholder="Type something or open a file"></textarea>
+        <div class="crypto">
+          <div class="aesKey">
+            <h2>AES key</h2>
+            <textarea
+              name="aesKeyArea"
+              id="aesKeyArea"
+              cols="65"
+              rows="3"
+              placeholder="AES key"
+            ></textarea>
+          </div>
+          <div class="keyArea">
+            <div class="encryptedKey">
+              <h2>Encrypted AES Key</h2>
+              <textarea
+                name="encryptedKeyArea"
+                id="encryptedKeyArea"
+                cols="30"
+                rows="10"
+                placeholder="Encrypted AES Key"
+              ></textarea>
+              <button class="encryptButt" id="encryptButt" type="button">
+                Encrypt
+              </button>
+            </div>
+            <div class="privateKey">
+              <h2>Private Key</h2>
+              <textarea
+                name="privateKeyArea"
+                id="privateKeyArea"
+                cols="30"
+                rows="10"
+                placeholder="Private Key"
+              ></textarea>
+              <button class="decryptButt" id="decryptButt" type="button">
+                Decrypt
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="ciphertext">
+          <h2>Cipher text</h2>
+          <textarea
+            name="cipertextArea"
+            id="ciphertextArea"
+            cols="30"
+            rows="20  "
+            placeholder="Cypher text"
+          ></textarea>
+          <div id="downloadContainer">
+            <p>Download as</p>
+            <div class="button-row">
+              <button id="txtButton">txt</button>
+              <button id="xmlButton">xml</button>
+              <button id="docxButton">docx</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="buttonArea">
-      <button>Encrypt</button>
-      <button>Decrypt</button>
-      <button>Open file</button>
-      <button>Read file</button>
-    </div>
-  </div>
-
-  <script>
-    const plaintext = 'Hello, World!';
-    const key = AES.generateKey();
-
-    console.log('Plaintext:', plaintext);
-
-    const ciphertext = AES.encryptAES(plaintext, key);
-    console.log('Ciphertext:', ciphertext);
-
-    const decryptedText = AES.decryptAES(ciphertext, key);
-    console.log('Decrypted Text:', decryptedText);
-  </script>
-</body>
-
+    <script src="./open.js"></script>
+    <script type="module" src="./app.js"></script>
+  </body>
 </html>
