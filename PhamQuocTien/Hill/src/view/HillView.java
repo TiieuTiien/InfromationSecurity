@@ -390,7 +390,6 @@ public class HillView extends JFrame {
 
 		this.hillModel = new HillModel(key, message);
 
-		System.out.println(hillModel.getKey());
 		String cipher = this.hillModel.encrypt();
 
 		return cipher = (cipher.length() > 0) ? cipher : "Type something, please!";
@@ -419,8 +418,6 @@ public class HillView extends JFrame {
 		hillModel.setKey("");
 
 		String key = this.hillModel.keyGen();
-
-		System.out.println(key);
 
 		return key;
 	}

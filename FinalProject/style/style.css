@@ -1,0 +1,144 @@
+body {
+    color: #fff;
+}
+
+h1 {
+    margin-left: 500px;
+}
+
+.container {
+    display: flex;
+    column-gap: 5%;
+    margin-left: 1%;
+}
+
+.crypto {
+    display: grid;
+    grid-template-rows: auto;
+}
+
+.keyArea {
+    display: flex;
+    column-gap: 5%;
+}
+
+textarea {
+    resize: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    border-radius: 5px;
+    background-color: #5A5A5A;
+    font-weight: 200;
+    font-size: 14px;
+    color: white;
+    padding: 10px;
+}
+
+::placeholder {
+    color: white;
+    opacity: 0.7;
+}
+
+.encryptButt,
+.decryptButt {
+    position: inherit;
+    background-color: #4CAF50;
+    /* Green */
+    color: #fff;
+    border: none;
+    margin-top: 30px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: 0.1s;
+}
+
+.encryptedKey,
+.privateKey, 
+.publicKey {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.encryptButt:hover,
+.decryptButt:hover {
+    background-color: #fff;
+    color: black;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.plaintext {
+    display: flex;
+    flex-direction: column;
+}
+
+.ciphertext {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type=file] {
+    width: 267px;
+    max-width: 100%;
+    margin-top: 30px;
+    color: white;
+    padding: 5px;
+    background: #202124;
+    border-radius: 10px;
+    border: 1px solid #555;
+}
+
+input[type=file]::file-selector-button {
+    margin-right: 20px;
+    border: none;
+    background: #4CAF50;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+input[type=file]::file-selector-button:hover {
+    background-color: #fff;
+    color: black;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#downloadContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 267px;
+    max-width: 100%;
+    margin-top: 30px;
+    color: white;
+    padding: 5px;
+    background: #202124;
+    border-radius: 10px;
+    border: 1px solid #555;
+}
+
+#downloadContainer .button-row {
+  display: flex;
+}
+
+#downloadContainer .button-row button {
+  margin: 0 5px;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+  border: none;
+}
+
+#downloadContainer .button-row button:hover{
+    background-color: #fff;
+    color: black;
+    cursor: pointer;
+}

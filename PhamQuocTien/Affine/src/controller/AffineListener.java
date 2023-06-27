@@ -20,14 +20,34 @@ public class AffineListener implements ActionListener {
 			String b = Integer.toString(this.affineView.getB());
 			this.affineView.setaTextField(a);
 			this.affineView.setbTextField(b);
-			this.affineView.seteKeyATextField(a);
-			this.affineView.seteKeyBTextField(b);
-			this.affineView.setdKeyATextField(a);
-			this.affineView.setdKeyBTextField(b);
 		} else if (command == "Encrypt") {
-			this.affineView.seteCipherTextField(this.affineView.encrypt());
+			
+			String a = this.affineView.geteKeyATextField().getText().toString();
+			String b = this.affineView.geteKeyBTextField().getText().toString();
+			
+			if (a.length() == 0 || b.length() == 0)
+				this.affineView.seteCipherTextField("Nhap key !");
+			else
+				this.affineView.seteCipherTextField(this.affineView.encrypt());
 		} else if (command == "Decrypt") {
-			this.affineView.setdPlainTextField(this.affineView.decrypt());
+			
+			String a = this.affineView.getdKeyATextField().getText().toString();
+			String b = this.affineView.getdKeyBTextField().getText().toString();
+			
+			if (a.length() == 0 || b.length() == 0)
+				this.affineView.setdPlainTextField("Nhap key !");
+			else
+				this.affineView.setdPlainTextField(this.affineView.decrypt());
+		} else if (command == "Set Encrypt key") {
+			this.affineView.seteKeyATextField(this.affineView.getaTextField().getText().toString());
+			this.affineView.seteKeyBTextField(this.affineView.getbTextField().getText().toString());
+		} else if (command == "Set Decrypt key") {
+			this.affineView.setdKeyATextField(this.affineView.getaTextField().getText().toString());
+			this.affineView.setdKeyBTextField(this.affineView.getbTextField().getText().toString());
+		} else if (command == "Set Cipher Text") {
+			this.affineView.setdCipherTextField(this.affineView.geteCipherTextField().getText().toString());
+		} else if (command == "Set Plain Text") {
+			this.affineView.setePlainTextField(this.affineView.getdPlainTextField().getText().toString());
 		}
 
 	}
