@@ -1,6 +1,7 @@
 package model;
 
 public class DESModel {
+<<<<<<< HEAD
 	
 	private String keyString;
 	private long[] roundKeys;
@@ -467,4 +468,25 @@ public class DESModel {
 		System.out.println("Cipher text : " + Long.toHexString(cipherText));
 		System.out.println("Plain Text  : " + Long.toHexString(plainText));
 	}
+=======
+	public static void main(String[] args) {
+		String keyString = "M"; // Example key string
+
+		// Convert the key string to bytes using ASCII encoding
+		byte[] keyBytes = keyString.getBytes();
+
+		// Create a 64-bit key using the first 8 bytes
+		long encryptionKey = 0;
+		
+		int characters = keyString.length();
+		
+		for (int i = 0; i < characters; i++) {
+			encryptionKey <<= 8; // Shift the existing bits to the left
+			encryptionKey |= (keyBytes[i] & 0xFF); // Set the least significant byte
+		}
+
+		System.out.println("Encryption Key: " + encryptionKey);
+	}
+
+>>>>>>> 5ce87d9574fe715cc5a838cb76e2f689c02e6243
 }
